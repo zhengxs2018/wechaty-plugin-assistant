@@ -76,7 +76,7 @@ assistant.command.register('ping', function (ctx: ConversationContext) {
 
 在聊天窗口输入 `/ping`，机器人就会回复 `pong`.
 
-### 使用多模型切换功能
+## 使用多模型切换功能
 
 使用 `MultiChatModelSwitch` 类，可以让用户切换不同的模型。
 
