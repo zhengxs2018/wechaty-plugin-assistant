@@ -54,7 +54,7 @@ export class ChatERNIEBot implements ChatModel {
       conversationId: randomUUID(),
     };
 
-    const state = ctx.session.erniebot;
+    const state = ctx.session.ernie_bot;
 
     const chat = await limiter.add(
       ({ signal }) => {
