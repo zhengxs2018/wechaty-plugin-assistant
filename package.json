@@ -1,6 +1,6 @@
 {
   "name": "@zhengxs/wechaty-plugin-assistant",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0-alpha.1",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "exports": {
@@ -79,6 +79,14 @@
     "vite-plugin-externalize-deps": "^0.7.0",
     "wechaty": "^1.20.2",
     "wechaty-plugin-contrib": "^1.12.1"
+  },
+  "homepage": "https://github.com/zhengxs2018/wechaty-plugin-assistant#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zhengxs2018/wechaty-plugin-assistant"
+  },
+  "bugs": {
+    "url": "https://github.com/zhengxs2018/wechaty-plugin-assistant/issues"
   },
   "author": "zhengxs2018 <zhengxs2018@gmail.com>",
   "engines": {

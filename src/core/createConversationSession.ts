@@ -23,7 +23,7 @@ export async function createConversationSession(
     await cache.delete(key);
   };
 
-  return Object.create(state, {
+  Object.defineProperties(state, {
     clear: {
       configurable: false,
       enumerable: false,
@@ -37,4 +37,7 @@ export async function createConversationSession(
       value: restore,
     },
   });
+
+
+  return state as ConversationSession;
 }

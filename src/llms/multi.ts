@@ -75,7 +75,7 @@ export class MultiChatModelSwitch implements ChatModel {
       ⊶ 系统提示
       ﹊
 
-      当前模型: ${llm?.human_name} | 暂无可用模型。
+      当前模型: ${llm?.human_name || '暂无可用模型'}。
 
       模型列表
 

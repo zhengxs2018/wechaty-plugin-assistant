@@ -23,7 +23,7 @@ export async function createConversationUserConfig(
     await cache.delete(key);
   };
 
-  return Object.create(state, {
+  Object.defineProperties(state, {
     clear: {
       configurable: false,
       enumerable: false,
@@ -37,4 +37,7 @@ export async function createConversationUserConfig(
       value: restore,
     },
   });
+
+
+  return state as UserConfig;
 }
