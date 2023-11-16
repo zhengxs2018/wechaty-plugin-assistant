@@ -10,7 +10,7 @@ import {
   createConversationUserConfig,
   type UserConfig,
 } from './createConversationUserConfig';
-import { md5 } from './util';
+import { md5 } from '../shared';
 
 export type ConversationContext = {
   /**

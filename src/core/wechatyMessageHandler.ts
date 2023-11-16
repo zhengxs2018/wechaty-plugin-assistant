@@ -5,7 +5,7 @@ import { type Assistant } from './createAssistant';
 import { createConversationContext } from './createConversationContext';
 import { processTextMessage } from './processTextMessage';
 import { processUnknownMessage } from './processUnknownMessage';
-import { castToError } from './util';
+import { castToError } from '../shared';
 
 export async function wechatyMessageHandler(
   assistant: Assistant,
