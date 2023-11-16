@@ -3,6 +3,9 @@ import { type ConversationContext } from './createConversationContext';
 
 type MaybePromise<T> = T | Promise<T>;
 
+// TODO 添加 features 或类型字段
+// 以便于消息处理器可以根据消息类型进行分发
+// 或者夸多模型消息调度
 export interface ChatModel {
   /**
    * 名称

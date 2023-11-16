@@ -15,7 +15,19 @@ export type AssistantNotifications = {
   ) => void;
 };
 
-export type ImageCompress = (src: string, name: string) => Promise<string>;
+/**
+ * 超过一定大小的图会发送失败
+ * 需要对图片进行压缩
+ *
+ * @param src - 图片地址
+ * @param name - 文件名称
+ * @returns 压缩后的图片地址
+ */
+export type ImageCompressor = (src: string, name?: string) => Promise<string>;
+
+export type Compressors = {
+  image: ImageCompressor;
+};
 
 export type AssistantConfig = {
   /**
@@ -49,14 +61,11 @@ export type AssistantConfig = {
   notifications?: AssistantNotifications | null;
 
   /**
-   * 超过一定大小的图会发送失败
-   * 需要对图片进行压缩
+   * 各种压缩器
    *
-   * @param src - 图片地址
-   * @param name - 文件名称
-   * @returns 压缩后的图片地址
+   * 解决文件过大，消息发送失败的问题
    */
-  imgCompress?: ImageCompress | null;
+  compressors?: Compressors | null;
 
   /**
    * 是否跳过不支持的消息类型，由下一个机器人处理
@@ -75,7 +84,7 @@ export const resolveAssistantOptions = ({
   cache = createMemoryCache(),
   maintainers = [],
   notifications = null,
-  imgCompress = null,
+  compressors = null,
   skipUnsupportedMessage = false,
 }: AssistantConfig): AssistantOptions => ({
   llm,
@@ -84,6 +93,6 @@ export const resolveAssistantOptions = ({
   cache,
   maintainers,
   notifications,
-  imgCompress,
+  compressors,
   skipUnsupportedMessage,
 });

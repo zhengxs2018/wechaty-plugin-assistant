@@ -39,7 +39,7 @@ export type ConversationContext = {
   isAdmin: boolean;
 
   /**
-   * 消息内容
+   * 消息内容 {@link Message}
    */
   message: Message;
 
@@ -57,7 +57,7 @@ export type ConversationContext = {
    * 快速回复给发送者
    *
    * @param sayable - 可以被发送的内容
-   * @param done - 是否结束对话
+   * @param finished - 是否结束对话，仅用于输出日志
    */
   reply: (sayable: string, finished?: boolean) => Promise<void>;
 
@@ -73,7 +73,7 @@ export type ConversationContext = {
   releaseLock: () => void;
 
   /**
-   * 是否已经中断 {@link LockInfo}
+   * 当前上下文锁对象 {@link LockInfo}
    */
   lock?: LockInfo | null;
 
@@ -95,7 +95,7 @@ export type ConversationContext = {
   readonly aborted: boolean;
 
   /**
-   * 释放资源
+   * 释放资源，并存储过程数据
    */
   dispose: () => void;
 };

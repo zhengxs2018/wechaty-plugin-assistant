@@ -1,5 +1,7 @@
 # @zhengxs/wechaty-plugin-assistant
 
+[![Typescript](https://img.shields.io/badge/lang-typescript-informational?style=flat-square)](https://www.typescriptlang.org)[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)[![npm package](https://img.shields.io/npm/v/@zhengxs/wechaty-plugin-assistant.svg?style=flat-square)](https://www.npmjs.com/package/@zhengxs/wechaty-plugin-assistant)[![npm downloads](https://img.shields.io/npm/dt/@zhengxs/wechaty-plugin-assistant.svg?style=flat-square)](https://www.npmjs.com/package/@zhengxs/wechaty-plugin-assistant)![License](https://img.shields.io/npm/l/@zhengxs/wechaty-plugin-assistant.svg?style=flat-square)
+
 基于 wechaty 的聊天助手插件。
 
 > 非稳定状态，请勿用于生产环境
@@ -10,19 +12,19 @@
 
 ```sh
 # With NPM
-$ npm i wechaty @zhengxs/wechaty-plugin-assistant -S
+$ npm i -S @zhengxs/wechaty-plugin-assistant
 
 # With Yarn
-$ yarn add wechaty @zhengxs/wechaty-plugin-assistant
+$ yarn add @zhengxs/wechaty-plugin-assistant
 
 # With PNPM
-$ pnpm add wechaty wechaty-plugin-contrib @zhengxs/wechaty-plugin-assistant
+$ pnpm add @zhengxs/wechaty-plugin-assistant
 ```
 
 ### 使用
 
 ```ts
-import { ChatYiYan, defineLLM } from '@zhengxs/wechaty-plugin-assistant';
+import { ChatYiYan, createAssistant } from '@zhengxs/wechaty-plugin-assistant';
 import { WechatyBuilder } from 'wechaty';
 import { QRCodeTerminal } from 'wechaty-plugin-contrib';
 
