@@ -24,13 +24,16 @@ $ pnpm add @zhengxs/wechaty-plugin-assistant
 ### 使用
 
 ```ts
-import { ChatYiYan, createAssistant } from '@zhengxs/wechaty-plugin-assistant';
+import {
+  ChatERNIEBot,
+  createAssistant,
+} from '@zhengxs/wechaty-plugin-assistant';
 import { WechatyBuilder } from 'wechaty';
 import { QRCodeTerminal } from 'wechaty-plugin-contrib';
 
 // ============ 创建 AI 助手  ============
 
-const llm = new ChatYiYan({
+const llm = new ChatERNIEBot({
   cookies: process.env.ERNIE_BOT_COOKIE,
 });
 
@@ -54,164 +57,29 @@ bot.use(assistant.callback());
 bot.start();
 ```
 
-## 教程
+## 口令支持
 
-### 自定义模型
+| 口令                               | 描述                                                                          |
+| ---------------------------------- | ----------------------------------------------------------------------------- |
+| `新对话` \\ `新聊天` \\ `重新开始` | 模拟 Web UI 的，创建新聊天功能                                                |
+| `停止` \\ `停止回复`               | 模拟 Web UI 的，停止生成按钮                                                  |
+| `查看模型` \\ `切换 xxx`           | `MultiChatModelSwitch` 模块添加的功能，允许配置多个模型，由最终使用者自己切换 |
 
-```ts
-import {
-  ChatModel,
-  ConversationContext,
-  defineLLM,
-} from '@zhengxs/wechaty-plugin-assistant';
+## 模型支持
 
-// ============ 基于类  ============
+| 名称        | 描述                                                    | 模式          | 状态  |
+| ----------- | ------------------------------------------------------- | ------------- | ----- |
+| 文心一言    | 支持 百度千帆 和 AI Studio 的 API 调用                  | API           | Alpha |
+| 通义千问    |                                                         | -             | N/A   |
+| 讯飞星火    |                                                         | -             | N/A   |
+| Claude AI   | 基于 Claude To OpenAI，详见 [Claude 支持][claude-proxy] | Reverse Proxy | Alpha |
+| ChatGPT     | 推荐 [代理][openai-proxy]                               | API           | Alpha |
+| Google Bard |                                                         | -             | N/A   |
+| More...     |                                                         | -             | N/A   |
 
-class ChatCustom implements ChatModel {
-  name = 'custom';
-  human_name = '自定义模型';
+## 使用教程
 
-  call(ctx: ConversationContext) {
-    // message 就是 wechaty 的消息模型
-    const { message } = ctx;
-
-    // 直接回复发送者，如果在群里会直接 @ 他
-    ctx.reply(`hello ${message.text()}`);
-  }
-}
-
-// ============ 基于普通对象  ============
-
-const llm = defineLLM({
-  name: 'custom',
-  human_name: '自定义模型',
-  call(ctx: ConversationContext) {
-    // message 就是 wechaty 的消息模型
-    const { message } = ctx;
-
-    // 直接回复发送者，如果在群里会直接 @ 他
-    ctx.reply(`hello ${message.text()}`);
-  },
-});
-```
-
-记住当前聊天上下文
-
-```ts
-class ChatCustom implements ChatModel {
-  name = 'custom';
-  human_name = '自定义模型';
-
-  call(ctx: ConversationContext) {
-    // message 就是 wechaty 的消息模型
-    const { message, session } = ctx;
-
-    // 参考了 koa-session 模块
-    // 可以在这里写入任何支持序列化的数据
-    // 会自动保存到缓存中，无需手动处理
-    session.view = 1;
-
-    // 直接回复发送者，如果在群里会直接 @ 他
-    ctx.reply(`hello ${message.text()}`);
-  }
-}
-```
-
-### 注册聊天指令
-
-```ts
-const assistant = createAssistant({
-  llm,
-});
-
-// 注意：这里不要带 / 线，聊天需要加 斜线
-assistant.command.register('ping', function (ctx: ConversationContext) {
-  ctx.reply('pong');
-});
-```
-
-在聊天窗口输入 `/ping`，机器人就会回复 `pong`.
-
-### 使用多模型切换功能
-
-使用 `MultiChatModelSwitch` 类，可以让用户切换不同的模型。
-
-```ts
-import {
-  createAssistant,
-  MultiChatModelSwitch,
-} from '@zhengxs/wechaty-plugin-assistant';
-
-const assistant = createAssistant({
-  llm: new MultiChatModelSwitch([llm1, llm2, ..., llmN]),
-});
-```
-
-**使用**
-
-- 输入: `查看模型`
-  输出: 当前用户模型和列表
-- 输入: `切换xxx`
-  输出：已切换至 xx
-
-### 存储助手状态
-
-```ts
-import {
-  createAssistant,
-  type MemoryCache,
-} from '@zhengxs/wechaty-plugin-assistant';
-
-// 聊天上下文 和 MultiChatModelSwitch 的用户配置 都会调用这个
-// 默认存储在内存中
-const cache: MemoryCache = {
- /**
-   * 读取一条缓存
-   *
-   * @param key - 缓存的键
-   * @returns 缓存的值
-   */
-  async get(key: string) {
-
-  },
-
-  /**
-   * 写入一条缓存
-   *
-   * @param key - 缓存的键
-   * @param value - 缓存的值
-   * @param ttl - 单位为秒
-   * @returns 是否写入成功
-   */
-  async set(key: string, value: unknown, ttl?: number): Promise<true> {
-    return true
-  },
-
-  /**
-   * 删除一条缓存
-   * @param key - 缓存的键
-   * @returns 是否删除成功
-   */
-  async delete(key: string): Promise<boolean> {
-    return true
-  },
-
-  /**
-   * 删除所有条目
-   */
-  async clear(): Promise<void> {
-    // pass
-  }
-}
-
-const assistant = createAssistant({
-  llm,
-  cache:
-});
-```
-
-- `user:config:<talkerId>` - 这是用户配置的 key
-- `assistant:session:${md5(roomId + talkerId)}` - 这是聊天上下文的 key
+[文档](./docs/tutorials.md)
 
 ## 感谢
 
@@ -228,3 +96,6 @@ const assistant = createAssistant({
 ## License
 
 MIT
+
+[claude-proxy]: https://github.com/UNICKCHENG/openai-proxy#claude-web-api-%E6%94%AF%E6%8C%81
+[openai-proxy]: https://www.openai-proxy.com/

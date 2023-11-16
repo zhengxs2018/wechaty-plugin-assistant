@@ -1,6 +1,6 @@
 import {
-  ChatAIStudio,
-  ChatYiYan,
+  ChatClaude,
+  ChatERNIEBot,
   createAssistant,
   MultiChatModelSwitch,
 } from '../src';
@@ -8,11 +8,15 @@ import { run } from './_wechaty';
 
 const assistant = createAssistant({
   llm: new MultiChatModelSwitch([
-    new ChatAIStudio({
-      cookie: process.env.BAIDU_COOKIE!,
+    new ChatERNIEBot({
+      token: process.env.EB_ACCESS_TOKEN,
     }),
-    new ChatYiYan({
-      cookies: process.env.BAIDU_COOKIE,
+    new ChatClaude({
+      apiOrg: process.env.CLAUDE_API_ORG!,
+      apiKey: process.env.CLAUDE_SESSION_KEY!,
+      completionParams: {
+        model: 'claude-instant-1',
+      },
     }),
   ]),
 });

@@ -1,5 +1,6 @@
 import { log, type Message, type Sayable } from 'wechaty';
 
+import { md5 } from '../shared';
 import { type Assistant } from './createAssistant';
 import { type LockInfo } from './createAssistantMonitor';
 import {
@@ -10,7 +11,6 @@ import {
   createConversationUserConfig,
   type UserConfig,
 } from './createConversationUserConfig';
-import { md5 } from '../shared';
 
 export type ConversationContext = {
   /**

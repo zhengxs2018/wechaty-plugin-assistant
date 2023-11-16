@@ -1,22 +1,38 @@
+import { randomUUID } from 'node:crypto';
+
 import { codeBlock } from 'common-tags';
 
 import { type ChatModel, type ConversationContext } from '../core';
-import { AIStudioAPI, AIStudioAPIOptions } from '../llmapi/aistudio';
+import { ChatGPTAPI, ChatGPTAPIOptions } from '../llmapi';
 import { PQueue } from '../vendors';
 
-export class ChatAIStudio implements ChatModel {
-  name = 'chat-aistudio';
+export interface ChatOpenAIOptions extends ChatGPTAPIOptions {
+  concurrency?: number;
+  interval?: number;
+}
 
-  human_name = '飞浆 AI';
+export class ChatOpenAI implements ChatModel {
+  name = 'openai-api';
 
-  api: AIStudioAPI;
+  human_name = 'ChatGPT';
+
+  api: ChatGPTAPI;
 
   limiter: PQueue;
 
-  constructor(options: AIStudioAPIOptions) {
-    const { concurrency = 3, interval = 1000, ...rest } = options;
+  constructor(options: ChatOpenAIOptions) {
+    const {
+      concurrency = 3,
+      interval = 1000,
+      // See https://github.com/UNICKCHENG/openai-proxy
+      apiBaseUrl = 'https://openai.aihey.cc/openai/v1',
+      ...rest
+    } = options;
 
-    this.api = new AIStudioAPI(rest);
+    this.api = new ChatGPTAPI({
+      ...rest,
+      apiBaseUrl,
+    });
 
     this.limiter = new PQueue({
       concurrency,
@@ -42,10 +58,15 @@ export class ChatAIStudio implements ChatModel {
 
     const { api, limiter } = this;
 
-    const text = message.text();
-    const state = ctx.session?.chatgpt ?? {};
+    // 设置会话状态
+    ctx.session.openai ??= {
+      conversationId: randomUUID(),
+    };
 
-    const chat: any = await limiter.add(
+    const state = ctx.session.openai;
+    const text = message.text();
+
+    const chat = await limiter.add(
       ({ signal }) => {
         return api.sendMessage(text, {
           conversationId: state.conversationId,
@@ -60,7 +81,7 @@ export class ChatAIStudio implements ChatModel {
     );
 
     state.conversationId = chat.conversationId;
-    state.parentMessageId = chat.parentMessageId;
+    state.parentMessageId = chat.id;
 
     ctx.reply(
       codeBlock`

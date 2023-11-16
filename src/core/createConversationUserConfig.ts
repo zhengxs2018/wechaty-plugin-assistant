@@ -38,6 +38,5 @@ export async function createConversationUserConfig(
     },
   });
 
-
   return state as UserConfig;
 }

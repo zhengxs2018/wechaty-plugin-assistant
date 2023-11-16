@@ -1,6 +1,6 @@
 {
   "name": "@zhengxs/wechaty-plugin-assistant",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.2",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "exports": {
@@ -42,13 +42,13 @@
     "wechaty": ">=1"
   },
   "dependencies": {
+    "@zhengxs/erniebot": "0.1.0-alpha.5",
     "common-tags": "^1.8.2",
     "eventemitter3": "^5.0.1",
     "eventsource-parser": "^1.1.1",
     "js-tiktoken": "^1.0.8",
     "keyv": "^4.5.4",
-    "minimist": "^1.2.8",
-    "yiyan-chat": "^0.0.1"
+    "minimist": "^1.2.8"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.38.3",

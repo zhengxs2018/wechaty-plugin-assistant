@@ -38,6 +38,5 @@ export async function createConversationSession(
     },
   });
 
-
   return state as ConversationSession;
 }

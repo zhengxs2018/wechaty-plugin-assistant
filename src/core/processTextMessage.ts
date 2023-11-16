@@ -33,7 +33,7 @@ export async function processTextMessage(
 
   const { monitor } = assistant;
 
-  if (['停止', '停'].includes(text)) {
+  if (['停止', '停止回复'].includes(text)) {
     if (ctx.isLocked) {
       monitor.stats.skipped += 1;
 
