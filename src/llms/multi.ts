@@ -74,11 +74,9 @@ export class MultiChatModelSwitch implements ChatModel {
       return ctx.reply(codeBlock`
       ⊶ 系统提示
       ﹊
-
       当前模型: ${llm?.human_name || '暂无可用模型'}。
 
       模型列表
-
       ${Array.from(this.llms.values())
         .map(llm => `  - ${llm.human_name}`)
         .join(`\n`)}`);
@@ -90,9 +88,7 @@ export class MultiChatModelSwitch implements ChatModel {
         return ctx.reply(codeBlock`
           ⊶ 系统提示
           ﹊
-
           模型列表
-
           ${Array.from(this.llms.values())
             .map(llm => `  - ${llm.human_name}`)
             .join(`\n`)}`);
@@ -106,18 +102,15 @@ export class MultiChatModelSwitch implements ChatModel {
         return ctx.reply(codeBlock`
         ⊶ 系统提示
         ﹊
-
         已切换至 ${found.human_name}`);
       }
 
       return ctx.reply(codeBlock`
       ⊶ 系统提示
       ﹊
-
       需要切换至的模型不存在或不可用，请选择其他模型。
 
       模型列表
-
       ${Array.from(this.llms.values())
         .map(llm => `  - ${llm.human_name}`)
         .join(`\n`)}`);

@@ -30,7 +30,7 @@
   ],
   "scripts": {
     "prepare": "husky install",
-    "dev": "pnpm task --watch ./demo/hello.ts",
+    "dev": "pnpm task --watch ./demo/multi-llms.ts",
     "task": "node --no-warnings --inspect -r tsconfig-paths/register -r dotenv/config -r jiti/register",
     "build": "trash dist dist-types && tsc --noEmit && pnpm lint && vite build",
     "lint": "eslint . --ext .ts,.cjs",

@@ -63,7 +63,6 @@ export async function wechatyMessageHandler(
     ctx.reply(codeBlock`
     ⊶ 系统提示
     ﹊
-
     系统错误，请稍后再试！`);
   } finally {
     ctx.dispose();

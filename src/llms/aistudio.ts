@@ -35,7 +35,6 @@ export class ChatAIStudio implements ChatModel {
         codeBlock`
         ⊶ 系统提示
         ﹊
-
         ${this.human_name} 暂不支持此类型的消息`,
         true,
       );
@@ -66,7 +65,6 @@ export class ChatAIStudio implements ChatModel {
     ctx.reply(
       codeBlock`
       ${chat.text}
-
       -------------------
       以上内容来自 ${this.human_name}，与开发者无关`,
       true,

@@ -46,7 +46,6 @@ export class ChatYiYan implements ChatModel {
       return ctx.reply(
         codeBlock`
         暂不支持此类型的消息
-
         -------------------
         以上内容来自 ${this.human_name}，与开发者无关`,
         true,
@@ -81,7 +80,6 @@ export class ChatYiYan implements ChatModel {
       return ctx.reply(
         codeBlock`
           ${chat.tokens_all || '内容含有违禁词，请勿发送不良内容'}
-
           -------------------
           以上内容来自 ${this.human_name}，与开发者无关`,
         true,
@@ -94,7 +92,6 @@ export class ChatYiYan implements ChatModel {
       return ctx.reply(
         codeBlock`
         ${chat.tokens_all || '会话已过期，请重新提问'}
-
         -------------------
         以上内容来自 ${this.human_name}，与开发者无关`,
         true,
@@ -113,7 +110,6 @@ export class ChatYiYan implements ChatModel {
         ${parsed.text}
 
         提示语: ${text}
-
         -------------------
         以上内容来自 ${this.human_name}，与开发者无关`);
     }
@@ -121,7 +117,6 @@ export class ChatYiYan implements ChatModel {
     if (chat.chatType === 'TTS') {
       return ctx.reply(codeBlock`
       ${chat.content}
-
       -------------------
       以上内容来自 ${this.human_name}，与开发者无关`);
     }
@@ -143,7 +138,6 @@ export class ChatYiYan implements ChatModel {
               ${endDesc}
 
               ${jumpText}: ${jumpLink}
-
               -------------------
               以上内容来自 ${this.human_name}，与开发者无关`);
           }
@@ -152,7 +146,6 @@ export class ChatYiYan implements ChatModel {
             ${fileInfo.pic}
 
             ${endDesc}
-
             -------------------
             以上内容来自 ${this.human_name}，与开发者无关`);
         }
@@ -162,7 +155,6 @@ export class ChatYiYan implements ChatModel {
     ctx.reply(
       codeBlock`
       ${chat.tokens_all || chat.content}
-
       -------------------
       以上内容来自 ${this.human_name}，与开发者无关`,
       true,

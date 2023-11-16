@@ -11,6 +11,5 @@ export async function processUnknownMessage(
   return ctx.reply(codeBlock`
   ⊶ 系统提示
   ﹊
-
   暂时无法处理该消息类型`);
 }
