@@ -26,8 +26,8 @@ export async function processTextMessage(
   const text = message.text().trim();
   if (!text) {
     return reply(codeBlock`
-      系统提示
-      ============
+      ⊶ 系统提示
+      ﹊
 
       👀 你想要说什么？`);
   }
@@ -42,8 +42,8 @@ export async function processTextMessage(
     }
 
     return reply(codeBlock`
-      系统提示
-      ============
+      ⊶ 系统提示
+      ﹊
 
       好的，我不会再回复你了`);
   }
@@ -59,8 +59,8 @@ export async function processTextMessage(
     }
 
     return reply(codeBlock`
-      系统提示
-      ============
+      ⊶ 系统提示
+      ﹊
 
       好的，让我们重新开始吧！`);
   }
@@ -78,8 +78,8 @@ export async function processTextMessage(
   // 防止重复提问
   if (ctx.isLocked) {
     return reply(codeBlock`
-    系统提示
-    ============
+    ⊶ 系统提示
+    ﹊
 
     稍等一下，还在思考中...`);
   }

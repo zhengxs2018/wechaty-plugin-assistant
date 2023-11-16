@@ -56,8 +56,6 @@ export class MultiChatModelSwitch implements ChatModel {
   findLLMModel(searchName: string) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     for (const [_, llm] of this.llms) {
-      console.log(llm.name, llm.human_name, searchName);
-
       if (
         llm.name.toLowerCase().includes(searchName) ||
         llm.human_name.toLowerCase().includes(searchName)
@@ -74,8 +72,8 @@ export class MultiChatModelSwitch implements ChatModel {
       const llm = this.getLLM(ctx.userConfig.model);
 
       return ctx.reply(codeBlock`
-      系统提示
-      ===================
+      ⊶ 系统提示
+      ﹊
 
       当前模型: ${llm?.human_name} | 暂无可用模型。
 
@@ -90,8 +88,8 @@ export class MultiChatModelSwitch implements ChatModel {
       const searchName = text.split('切换')[1]?.trim();
       if (!searchName) {
         return ctx.reply(codeBlock`
-          系统提示
-          ===================
+          ⊶ 系统提示
+          ﹊
 
           模型列表
 
@@ -106,15 +104,15 @@ export class MultiChatModelSwitch implements ChatModel {
         ctx.userConfig.model = found.name;
 
         return ctx.reply(codeBlock`
-        系统提示
-        ===================
+        ⊶ 系统提示
+        ﹊
 
         已切换至 ${found.human_name}`);
       }
 
       return ctx.reply(codeBlock`
-      系统提示
-      ===================
+      ⊶ 系统提示
+      ﹊
 
       需要切换至的模型不存在或不可用，请选择其他模型。
 

@@ -61,8 +61,8 @@ export async function wechatyMessageHandler(
     log.error(error.message);
 
     ctx.reply(codeBlock`
-    系统提示
-    ============
+    ⊶ 系统提示
+    ﹊
 
     系统错误，请稍后再试！`);
   } finally {

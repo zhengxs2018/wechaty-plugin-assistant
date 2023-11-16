@@ -33,8 +33,8 @@ export class ChatAIStudio implements ChatModel {
     if (message.type() !== Message.Type.Text) {
       return ctx.reply(
         codeBlock`
-        系统提示
-        ===================
+        ⊶ 系统提示
+        ﹊
 
         ${this.human_name} 暂不支持此类型的消息`,
         true,
