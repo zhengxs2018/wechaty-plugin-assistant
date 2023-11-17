@@ -46,6 +46,11 @@ export type ConversationContext = {
   talkerName: string;
 
   /**
+   * 聊天机器人的名称
+   */
+  chatbotUserName: string;
+
+  /**
    * 是否是管理员
    */
   isAdmin: boolean;
@@ -141,11 +146,13 @@ export async function createConversationContext(
     options: { maintainers, cache },
   } = assistant;
 
-  const [conversationTitle, userConfig, session] = await Promise.all([
-    room?.topic(),
-    createConversationUserConfig(cache, talkerId),
-    createConversationSession(cache, conversationId),
-  ]);
+  const [conversationTitle, chatbotUserName, userConfig, session] =
+    await Promise.all([
+      room?.topic(),
+      message.wechaty.currentUser.name(),
+      createConversationUserConfig(cache, talkerId),
+      createConversationSession(cache, conversationId),
+    ]);
 
   // 消息日志
   if (room) {
@@ -189,6 +196,7 @@ export async function createConversationContext(
     conversationTitle,
     talkerId,
     talkerName,
+    chatbotUserName,
     isAdmin: maintainers.includes(talkerId),
     userConfig,
     session,
