@@ -79,7 +79,7 @@ bot.start();
 | 文心一言    | 支持 百度千帆 和 AI Studio 的 API 调用                  | API           | Alpha |
 | 通义千问    |                                                         | -             | N/A   |
 | 讯飞星火    |                                                         | -             | N/A   |
-| Claude      | 基于 Claude To OpenAI，详见 [Claude 支持][claude-proxy] | Reverse Proxy | Alpha |
+| Claude      | 基于 [Claude](https://claude.ai/chats) Web API，内部已配置 [反向代理服务][apifox] | Reverse Proxy | Alpha |
 | ChatGPT     | 推荐 [代理][openai-proxy]                               | API           | Alpha |
 | Google Bard |                                                         | -             | N/A   |
 | More...     |                                                         | -             | N/A   |
@@ -104,5 +104,5 @@ bot.start();
 
 MIT
 
-[claude-proxy]: https://github.com/UNICKCHENG/openai-proxy#claude-web-api-%E6%94%AF%E6%8C%81
+[apifox]: https://openai-proxy.apifox.cn/
 [openai-proxy]: https://www.openai-proxy.com/
