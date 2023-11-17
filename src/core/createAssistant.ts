@@ -91,7 +91,7 @@ export function createAssistant(config: AssistantConfig) {
       const { llm } = options;
 
       if (llm.input_type.includes(ctx.type)) {
-        llm.call(ctx, assistant);
+        await llm.call(ctx, assistant);
       } else {
         ctx.reply(codeBlock`
         ⊶ 系统提示
