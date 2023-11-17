@@ -96,6 +96,7 @@ bot.start();
 - [koa.js](https://github.com/koajs/koa)
 - [koa-session](https://github.com/koajs/session)
 - [vitepress](https://github.com/vuejs/vitepress)
+- [openai-proxy](https://github.com/UNICKCHENG/openai-proxy)
 - And more
 
 以上排名不分先后
