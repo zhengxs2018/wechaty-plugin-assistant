@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 
-import ERNIEBotSDK, { type EBOptions } from '@zhengxs/erniebot';
+import { ERNIEBot, type EBOptions } from '@zhengxs/erniebot';
 import Keyv from 'keyv';
 
 import { QuickLRU } from '../vendors';
@@ -45,7 +45,7 @@ export class ERNIEBotAPI {
 
   protected _messageStore: Keyv<ChatMessage>;
 
-  api: ERNIEBotSDK;
+  api: ERNIEBot;
 
   constructor(opts: EBApiOptions) {
     const {
@@ -58,7 +58,7 @@ export class ERNIEBotAPI {
       ...rest
     } = opts;
 
-    this.api = new ERNIEBotSDK({
+    this.api = new ERNIEBot({
       ...rest,
       model,
     });

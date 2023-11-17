@@ -27,6 +27,7 @@ words:
   - msgtype
   - openai
   - preinstall
+  - qianfan
   - tiktoken
   - trivago
   - wechat
