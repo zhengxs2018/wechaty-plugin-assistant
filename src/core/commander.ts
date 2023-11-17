@@ -95,9 +95,14 @@ export class Command {
   parent?: Command;
 
   /**
-   * 介绍
+   * 简短描述
    */
   #summary?: string;
+
+  /**
+   * 详细描述
+   */
+  #description?: string;
 
   /**
    * 配置项
@@ -123,6 +128,7 @@ export class Command {
     this.name = name;
 
     this.#summary = options.summary || '';
+    this.#description = options.description;
     this.required = options.required === true;
     this.disabled = options.disabled === true;
     this.default = options.default === true;
@@ -203,6 +209,10 @@ export class Command {
       Commands:
 
       ${commands.join('\n')}`);
+    }
+
+    if (this.#description) {
+      chunks.push(this.#description);
     }
 
     return chunks.join('\n\n');

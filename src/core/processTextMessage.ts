@@ -33,6 +33,17 @@ export async function processTextMessage(
 
   const { monitor } = assistant;
 
+  // Note: 需要先清理，否则命令无法匹配
+  // 如果是群聊，清除自身的 @ 信息
+  if (ctx.conversationTitle) {
+    message.payload!.text = text
+      // 清理 @机器人 的信息
+      .replaceAll(`@${ctx.chatbotUserName}`, '')
+      // 去除 @ 符合，但保留 @ 后的内容
+      .replaceAll(/@(\S*)/gmu, '$1')
+      .trim();
+  }
+
   if (['停止', '停止回复'].includes(text)) {
     if (ctx.isLocked) {
       monitor.stats.skipped += 1;
@@ -82,16 +93,6 @@ export async function processTextMessage(
 
   // 锁定对话
   ctx.createLock();
-
-  // 如果是群聊，清除自身的 @ 信息
-  if (ctx.conversationTitle) {
-    message.payload!.text = text
-      // 清理 @机器人 的信息
-      .replaceAll(`@${ctx.chatbotUserName}`, '')
-      // 去除 @ 符合，但保留 @ 后的内容
-      .replaceAll(/@(\S*)/gmu, '$1')
-      .trim();
-  }
 
   // 处理消息引用
   if (text.includes(REF_MSG_SEP)) {
