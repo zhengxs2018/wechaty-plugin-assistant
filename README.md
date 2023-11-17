@@ -74,15 +74,15 @@ bot.start();
 
 ## 模型支持
 
-| 名称        | 描述                                                    | 模式          | 状态  |
-| ----------- | ------------------------------------------------------- | ------------- | ----- |
-| 文心一言    | 支持 百度千帆 和 AI Studio 的 API 调用                  | API           | Alpha |
-| 通义千问    |                                                         | -             | N/A   |
-| 讯飞星火    |                                                         | -             | N/A   |
+| 名称        | 描述                                                                              | 模式          | 状态  |
+| ----------- | --------------------------------------------------------------------------------- | ------------- | ----- |
+| 文心一言    | 支持 百度千帆 和 AI Studio 的 API 调用                                            | API           | Alpha |
+| 通义千问    |                                                                                   | -             | N/A   |
+| 讯飞星火    |                                                                                   | -             | N/A   |
 | Claude      | 基于 [Claude](https://claude.ai/chats) Web API，内部已配置 [反向代理服务][apifox] | Reverse Proxy | Alpha |
-| ChatGPT     | 推荐 [代理][openai-proxy]                               | API           | Alpha |
-| Google Bard |                                                         | -             | N/A   |
-| More...     |                                                         | -             | N/A   |
+| ChatGPT     | 推荐 [代理][openai-proxy]                                                         | API           | Alpha |
+| Google Bard |                                                                                   | -             | N/A   |
+| More...     |                                                                                   | -             | N/A   |
 
 ## 使用教程
 

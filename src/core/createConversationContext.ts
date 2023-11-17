@@ -1,6 +1,7 @@
+import { FileBox, type FileBoxInterface } from 'file-box';
 import { log, type Message, type Sayable } from 'wechaty';
 
-import { md5 } from '../shared';
+import { md5, sleep } from '../util';
 import { type Assistant } from './createAssistant';
 import { type LockInfo } from './createAssistantMonitor';
 import {
@@ -81,7 +82,24 @@ export type ConversationContext = {
    * @param sayable - 可以被发送的内容
    * @param finished - 是否结束对话，仅用于输出日志
    */
-  reply: (sayable: string, finished?: boolean) => Promise<void>;
+  reply: (sayable: Sayable, finished?: boolean) => Promise<void>;
+
+  /**
+   * 发送远程文件给发送者
+   *
+   * 每次文件发送后，会等待 460ms
+   */
+  sendFileFromUrl(url: string, name?: string): Promise<void>;
+
+  /**
+   * 发送文件给发送者
+   *
+   * 每次文件发送后，会等待 460ms
+   */
+  sendFileBox(
+    file: FileBoxInterface,
+    callback: (err: Error) => any,
+  ): Promise<void>;
 
   /**
    * 创建一个锁定 {@link LockInfo}
@@ -166,7 +184,8 @@ export async function createConversationContext(
   async function reply(sayable: Sayable, finished?: boolean): Promise<void> {
     if (room) {
       if (typeof sayable === 'string') {
-        await room.say(sayable, talker);
+        // 群聊中让消息更好看
+        await room.say(`\n\n ${sayable}`, talker);
       } else {
         await room.say(sayable);
       }
@@ -191,7 +210,21 @@ export async function createConversationContext(
     userConfig.restore();
   };
 
-  const ctx = {
+  async function sendFileBox(
+    file: FileBoxInterface,
+    callback: (err: Error) => any,
+  ) {
+    await reply(file).then(
+      () => sleep(460),
+      err => callback(err),
+    );
+  }
+
+  async function sendFileFromUrl(url: string, name?: string) {
+    await sendFileBox(FileBox.fromUrl(url, { name }), () => ctx.reply(url));
+  }
+
+  const ctx: ConversationContext = {
     conversationId,
     conversationTitle,
     talkerId,
@@ -200,8 +233,11 @@ export async function createConversationContext(
     isAdmin: maintainers.includes(talkerId),
     userConfig,
     session,
-    type: ChatType.Unknown,
+    type: resolveChatType(message),
     message,
+    reply,
+    sendFileBox,
+    sendFileFromUrl,
     lock: null,
     createLock() {
       ctx.lock = monitor.defineLock({
@@ -223,7 +259,6 @@ export async function createConversationContext(
     get signal() {
       return ctx.lock?.controller.signal;
     },
-    reply,
     abort(reason) {
       ctx.lock?.abort(reason);
     },
@@ -231,9 +266,7 @@ export async function createConversationContext(
       return ctx.lock?.controller.signal.aborted ?? false;
     },
     dispose,
-  } as ConversationContext;
-
-  ctx.type = resolveChatType(message);
+  };
 
   return ctx;
 }

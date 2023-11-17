@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 
-import { ERNIEBot, type EBOptions } from '@zhengxs/erniebot';
+import { type EBOptions, ERNIEBot } from '@zhengxs/erniebot';
 import Keyv from 'keyv';
 
 import { QuickLRU } from '../vendors';

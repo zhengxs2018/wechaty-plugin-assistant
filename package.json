@@ -1,6 +1,6 @@
 {
   "name": "@zhengxs/wechaty-plugin-assistant",
-  "version": "0.1.0-alpha.9",
+  "version": "0.1.0-alpha.10",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "description": "基于 wechaty 的聊天助手插件",
@@ -57,6 +57,7 @@
     "common-tags": "^1.8.2",
     "eventemitter3": "^5.0.1",
     "eventsource-parser": "^1.1.1",
+    "file-box": "^1.4.15",
     "js-tiktoken": "^1.0.8",
     "keyv": "^4.5.4",
     "minimist": "^1.2.8"
