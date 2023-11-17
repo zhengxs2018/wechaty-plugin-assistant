@@ -23,7 +23,7 @@ export async function processTextMessage(
   const { message, reply } = ctx;
 
   // 拒绝空内容
-  const text = message.text().trim();
+  let text = message.text().trim();
   if (!text) {
     return reply(codeBlock`
       ⊶ 系统提示
@@ -36,7 +36,7 @@ export async function processTextMessage(
   // Note: 需要先清理，否则命令无法匹配
   // 如果是群聊，清除自身的 @ 信息
   if (ctx.conversationTitle) {
-    message.payload!.text = text
+    message.payload!.text = text = text
       // 清理 @机器人 的信息
       .replaceAll(`@${ctx.chatbotUserName}`, '')
       // 去除 @ 符合，但保留 @ 后的内容
