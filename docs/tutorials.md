@@ -61,6 +61,9 @@ class ChatCustom implements ChatModel {
 }
 ```
 
+**注意:** session 已经隔离了不同用户，以及私聊和群里下的同一个用户，所以你存储的状态，不用担心会影响到其他人。
+
+
 ## 注册聊天指令
 
 ```ts
