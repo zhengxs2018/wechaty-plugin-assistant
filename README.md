@@ -34,7 +34,8 @@ import { QRCodeTerminal } from 'wechaty-plugin-contrib';
 // ============ 创建 AI 助手  ============
 
 const llm = new ChatERNIEBot({
-  cookies: process.env.ERNIE_BOT_COOKIE,
+  // 百度文心千帆的 token
+  token: process.env.EB_ACCESS_TOKEN,
 });
 
 const assistant = createAssistant({
@@ -72,7 +73,7 @@ bot.start();
 | 文心一言    | 支持 百度千帆 和 AI Studio 的 API 调用                  | API           | Alpha |
 | 通义千问    |                                                         | -             | N/A   |
 | 讯飞星火    |                                                         | -             | N/A   |
-| Claude AI   | 基于 Claude To OpenAI，详见 [Claude 支持][claude-proxy] | Reverse Proxy | Alpha |
+| Claude      | 基于 Claude To OpenAI，详见 [Claude 支持][claude-proxy] | Reverse Proxy | Alpha |
 | ChatGPT     | 推荐 [代理][openai-proxy]                               | API           | Alpha |
 | Google Bard |                                                         | -             | N/A   |
 | More...     |                                                         | -             | N/A   |
