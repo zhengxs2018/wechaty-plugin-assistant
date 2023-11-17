@@ -43,7 +43,7 @@ export async function processTextMessage(
     return reply(codeBlock`
       ⊶ 系统提示
       ﹊
-      好的，我不会再回复你了`);
+      好的，我将不再回复。如果你有其他问题或需要帮助，请随时告诉我，我将竭诚为您服务。`);
   }
 
   // 允许用户主动终止对话
@@ -59,7 +59,7 @@ export async function processTextMessage(
     return reply(codeBlock`
       ⊶ 系统提示
       ﹊
-      好的，让我们重新开始吧！`);
+      好的，让我们重新开始聊天吧！你有什么想和我聊的吗？`);
   }
 
   // Note: 如果以斜线开头当作指令处理
