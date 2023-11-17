@@ -1,5 +1,5 @@
 import {
-  ChatClaude,
+  ChatClaudeAI,
   ChatERNIEBot,
   createAssistant,
   MultiChatModelSwitch,
@@ -11,12 +11,9 @@ const assistant = createAssistant({
     new ChatERNIEBot({
       token: process.env.EB_ACCESS_TOKEN,
     }),
-    new ChatClaude({
+    new ChatClaudeAI({
       apiOrg: process.env.CLAUDE_API_ORG!,
-      apiKey: process.env.CLAUDE_SESSION_KEY!,
-      completionParams: {
-        model: 'claude-instant-1',
-      },
+      sessionKey: process.env.CLAUDE_SESSION_KEY!,
     }),
   ]),
 });

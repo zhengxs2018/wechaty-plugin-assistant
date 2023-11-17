@@ -1,7 +1,6 @@
 import { codeBlock } from 'common-tags';
-import { randomUUID } from 'crypto';
 
-import { type ChatModel, type ConversationContext } from '../core';
+import { type ChatModel, ChatType, type ConversationContext } from '../core';
 import { type EBApiOptions, ERNIEBotAPI } from '../llmapi';
 import { PQueue } from '../vendors';
 
@@ -12,12 +11,11 @@ export interface ChatERNIEBotOptions extends EBApiOptions {
 
 export class ChatERNIEBot implements ChatModel {
   name = 'erniebot';
-
   human_name = '文心一言';
+  input_type = [ChatType.Text];
 
-  api: ERNIEBotAPI;
-
-  limiter: PQueue;
+  protected api: ERNIEBotAPI;
+  protected limiter: PQueue;
 
   constructor(options: ChatERNIEBotOptions) {
     const { concurrency = 3, interval = 1000, ...rest } = options;
@@ -31,46 +29,22 @@ export class ChatERNIEBot implements ChatModel {
   }
 
   async call(ctx: ConversationContext) {
-    const { message } = ctx;
-    const {
-      wechaty: { Message },
-    } = message;
+    const { message, session } = ctx;
+    const state = (session.erniebot ??= {});
 
-    if (message.type() !== Message.Type.Text) {
-      return ctx.reply(
-        codeBlock`
-        ⊶ 系统提示
-        ﹊
-        ${this.human_name} 暂不支持此类型的消息`,
-        true,
-      );
-    }
-
-    const { api, limiter } = this;
-
-    const text = message.text();
-
-    ctx.session.ernie_bot ??= {
-      conversationId: randomUUID(),
-    };
-
-    const state = ctx.session.ernie_bot;
-
-    const chat = await limiter.add(
+    const chat = await this.limiter.add(
       ({ signal }) => {
-        return api.sendMessage(text, {
-          conversationId: state.conversationId,
+        return this.api.sendMessage(message.text(), {
           parentMessageId: state.parentMessageId,
           abortSignal: signal,
         });
       },
       {
-        signal: ctx.lock?.controller.signal,
+        signal: ctx.signal,
         throwOnTimeout: true,
       },
     );
 
-    state.conversationId = chat.conversationId;
     state.parentMessageId = chat.id;
 
     ctx.reply(

@@ -82,12 +82,23 @@ assistant.command.register('ping', function (ctx: ConversationContext) {
 
 ```ts
 import {
+  ChatClaudeAI,
+  ChatERNIEBot,
   createAssistant,
   MultiChatModelSwitch,
 } from '@zhengxs/wechaty-plugin-assistant';
 
+const erniebot = new ChatERNIEBot({
+  token: process.env.EB_ACCESS_TOKEN,
+});
+
+const claude = new ChatClaudeAI({
+  apiOrg: process.env.CLAUDE_API_ORG!,
+  sessionKey: process.env.CLAUDE_SESSION_KEY!,
+});
+
 const assistant = createAssistant({
-  llm: new MultiChatModelSwitch([llm1, llm2, ..., llmN]),
+  llm: new MultiChatModelSwitch([erniebot, claude, ...other]),
 });
 ```
 

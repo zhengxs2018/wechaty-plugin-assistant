@@ -1,5 +1,8 @@
 import { type Assistant } from './createAssistant';
-import { type ConversationContext } from './createConversationContext';
+import {
+  ChatType,
+  type ConversationContext,
+} from './createConversationContext';
 
 type MaybePromise<T> = T | Promise<T>;
 
@@ -18,10 +21,15 @@ export interface ChatModel {
   human_name: string;
 
   /**
+   * 支持的输出类型
+   */
+  input_type: ChatType[];
+
+  /**
    * @param context -
    * @param assistant-
    */
-  call(context: ConversationContext, assistant: Assistant): MaybePromise<any>;
+  call(context: ConversationContext, assistant: Assistant): MaybePromise<void>;
 }
 
 export const defineLLM = (model: ChatModel): ChatModel => model;

@@ -1,32 +1,31 @@
 import { codeBlock } from 'common-tags';
 
 import { type ChatModel, ChatType, type ConversationContext } from '../core';
-import { ChatGPTAPI, ChatGPTAPIOptions } from '../llmapi';
+import { ClaudeAI, type ClaudeAIOptions } from '../llmapi';
 import { PQueue } from '../vendors';
 
-export interface ChatOpenAIOptions extends ChatGPTAPIOptions {
+export interface ChatClaudeAIOptions extends ClaudeAIOptions {
   concurrency?: number;
   interval?: number;
 }
 
-export class ChatOpenAI implements ChatModel {
-  name = 'openai-api';
-  human_name = 'ChatGPT';
+export class ChatClaudeAI implements ChatModel {
+  name = 'claude-web-api';
+  human_name = 'Claude AI';
   input_type = [ChatType.Text];
 
-  protected api: ChatGPTAPI;
+  protected api: ClaudeAI;
   protected limiter: PQueue;
 
-  constructor(options: ChatOpenAIOptions) {
+  constructor(options: ChatClaudeAIOptions) {
     const {
       concurrency = 3,
       interval = 1000,
-      // See https://github.com/UNICKCHENG/openai-proxy
-      apiBaseUrl = 'https://openai.aihey.cc/openai/v1',
+      apiBaseUrl = 'https://openai.aihey.cc/claude',
       ...rest
     } = options;
 
-    this.api = new ChatGPTAPI({
+    this.api = new ClaudeAI({
       ...rest,
       apiBaseUrl,
     });
@@ -39,11 +38,14 @@ export class ChatOpenAI implements ChatModel {
 
   async call(ctx: ConversationContext) {
     const { message, session } = ctx;
-    const state = (session.openai ??= {});
+    const { api, limiter } = this;
 
-    const chat = await this.limiter.add(
+    const text = message.text();
+    const state = (session.claude ??= {});
+
+    const chat = await limiter.add(
       ({ signal }) => {
-        return this.api.sendMessage(message.text(), {
+        return api.sendMessage(text, {
           parentMessageId: state.parentMessageId,
           abortSignal: signal,
         });
@@ -54,6 +56,7 @@ export class ChatOpenAI implements ChatModel {
       },
     );
 
+    // 记录上下文
     state.parentMessageId = chat.id;
 
     ctx.reply(

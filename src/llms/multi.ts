@@ -1,75 +1,56 @@
 import { codeBlock } from 'common-tags';
 
-import { Assistant, type ChatModel, type ConversationContext } from '../core';
+import {
+  Assistant,
+  type ChatModel,
+  ChatType,
+  type ConversationContext,
+} from '../core';
 
 export class MultiChatModelSwitch implements ChatModel {
-  /**
-   * 名称
-   */
   name: string = 'multi-model';
-
-  /**
-   * 人类可读名称
-   */
   human_name: string = '多模型管理';
+  input_type: ChatType[] = [];
 
-  llms: Map<string, ChatModel> = new Map();
-
-  defaultLLM?: ChatModel;
+  // TODO 改成数组以支持不同模型的多个实例
+  protected llms: Map<string, ChatModel> = new Map();
+  protected llm?: ChatModel;
 
   constructor(llms: ChatModel[]) {
-    this.defaultLLM = llms[0];
+    this.llm = llms[0];
     this.llms = new Map(llms.map(llm => [llm.name, llm]));
-  }
-
-  getLLM(name?: string): ChatModel | undefined {
-    if (!name) return this.defaultLLM;
-
-    return this.llms.get(name) || this.defaultLLM;
+    this.input_type = llms.map(llm => llm.input_type).flat();
   }
 
   async call(ctx: ConversationContext, assistant: Assistant) {
-    const { message } = ctx;
-
-    const {
-      wechaty: { Message },
-    } = message;
-
     // TODO 类型转为字符串，移动到 core 中
-    if (message.type() === Message.Type.Text) {
+    if (ctx.type === ChatType.Text) {
       return this.processText(ctx, assistant);
     }
 
     return this.calling(ctx, assistant);
   }
 
-  async calling(ctx: ConversationContext, assistant: Assistant) {
-    const {
-      userConfig: { model },
-    } = ctx;
+  protected async calling(ctx: ConversationContext, assistant: Assistant) {
+    const llm = this.resolve(ctx.userConfig.model);
+    if (!llm) return;
 
-    const llm = this.getLLM(model);
-
-    await llm?.call(ctx, assistant);
-  }
-
-  findLLMModel(searchName: string) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    for (const [_, llm] of this.llms) {
-      if (
-        llm.name.toLowerCase().includes(searchName) ||
-        llm.human_name.toLowerCase().includes(searchName)
-      ) {
-        return llm;
-      }
+    if (llm.input_type.includes(ctx.type)) {
+      return llm.call(ctx, assistant);
     }
+
+    ctx.reply(codeBlock`
+      ⊶ 系统提示
+      ﹊
+      ${llm.human_name} 暂不支持处理此类消息！`);
   }
 
-  processText(ctx: ConversationContext, assistant: Assistant) {
-    const text = ctx.message.text();
+  protected processText(ctx: ConversationContext, assistant: Assistant) {
+    const { message, userConfig } = ctx;
+    const text = message.text();
 
     if (text === '查看模型') {
-      const llm = this.getLLM(ctx.userConfig.model);
+      const llm = this.resolve(userConfig.model);
 
       return ctx.reply(codeBlock`
       ⊶ 系统提示
@@ -94,10 +75,10 @@ export class MultiChatModelSwitch implements ChatModel {
             .join(`\n`)}`);
       }
 
-      const found = this.findLLMModel(searchName.toString());
+      const found = this.find(searchName.toString());
 
       if (found) {
-        ctx.userConfig.model = found.name;
+        userConfig.model = found.name;
 
         return ctx.reply(codeBlock`
         ⊶ 系统提示
@@ -117,5 +98,22 @@ export class MultiChatModelSwitch implements ChatModel {
     }
 
     return this.calling(ctx, assistant);
+  }
+
+  protected resolve(name?: string): ChatModel | undefined {
+    if (!name) return this.llm;
+    return this.llms.get(name) || this.llm;
+  }
+
+  protected find(searchName: string) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    for (const [_, llm] of this.llms) {
+      if (
+        llm.name.toLowerCase().includes(searchName) ||
+        llm.human_name.toLowerCase().includes(searchName)
+      ) {
+        return llm;
+      }
+    }
   }
 }

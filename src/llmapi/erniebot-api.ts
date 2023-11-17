@@ -14,16 +14,7 @@ import * as tokenizer from './chatgpt-api/tokenizer';
 const CHATGPT_MODEL = 'ernie-bot';
 
 const USER_LABEL_DEFAULT = 'User';
-const ASSISTANT_LABEL_DEFAULT = 'ASSISTANT';
-
-export type EBSendMessageOptions = {
-  parentMessageId?: string;
-  conversationId?: string;
-  messageId?: string;
-  stream?: boolean;
-  abortSignal?: AbortSignal;
-  completionParams?: Record<string, any>;
-};
+const ASSISTANT_LABEL_DEFAULT = 'ERNIE Bot';
 
 export interface EBApiOptions extends EBOptions {
   /** @defaultValue `4096` **/
@@ -103,7 +94,7 @@ export class ERNIEBotAPI {
    */
   async sendMessage(
     text: string,
-    opts: EBSendMessageOptions = {},
+    opts: SendMessageOptions = {},
   ): Promise<ChatMessage> {
     const {
       conversationId,

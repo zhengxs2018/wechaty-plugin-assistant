@@ -1,3 +1,4 @@
+import { codeBlock } from 'common-tags';
 import {
   type ContactSelf,
   Message,
@@ -58,7 +59,7 @@ export interface Assistant {
   /**
    * 调用大语言模型
    */
-  call(ctx: ConversationContext): Promise<string>;
+  call(ctx: ConversationContext): Promise<void>;
 
   /**
    * 启动助手
@@ -86,8 +87,17 @@ export function createAssistant(config: AssistantConfig) {
     callback: () => {
       return bot => void wechatyPluginCallback(assistant, bot);
     },
-    call(ctx) {
-      return options.llm.call(ctx, assistant);
+    async call(ctx) {
+      const { llm } = options;
+
+      if (llm.input_type.includes(ctx.type)) {
+        llm.call(ctx, assistant);
+      } else {
+        ctx.reply(codeBlock`
+        ⊶ 系统提示
+        ﹊
+        ${llm.human_name} 暂不支持处理此类消息！`);
+      }
     },
     run() {
       monitor.running = true;

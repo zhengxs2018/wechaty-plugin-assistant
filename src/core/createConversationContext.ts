@@ -12,6 +12,18 @@ import {
   type UserConfig,
 } from './createConversationUserConfig';
 
+/**
+ * 输入类型
+ */
+export enum ChatType {
+  Text = 'text',
+  Image = 'image',
+  Audio = 'audio',
+  Video = 'video',
+  File = 'file',
+  Unknown = 'unknown',
+}
+
 export type ConversationContext = {
   /**
    * 对话ID
@@ -37,6 +49,11 @@ export type ConversationContext = {
    * 是否是管理员
    */
   isAdmin: boolean;
+
+  /**
+   * 聊天类型
+   */
+  type: ChatType;
 
   /**
    * 消息内容 {@link Message}
@@ -76,6 +93,11 @@ export type ConversationContext = {
    * 当前上下文锁对象 {@link LockInfo}
    */
   lock?: LockInfo | null;
+
+  /**
+   * 中断信号
+   */
+  readonly signal: AbortSignal | undefined;
 
   /**
    * 是否被锁定
@@ -162,7 +184,7 @@ export async function createConversationContext(
     userConfig.restore();
   };
 
-  const ctx: ConversationContext = {
+  const ctx = {
     conversationId,
     conversationTitle,
     talkerId,
@@ -170,6 +192,7 @@ export async function createConversationContext(
     isAdmin: maintainers.includes(talkerId),
     userConfig,
     session,
+    type: ChatType.Unknown,
     message,
     lock: null,
     createLock() {
@@ -189,6 +212,9 @@ export async function createConversationContext(
     get isLocked() {
       return monitor.isLocked(conversationId);
     },
+    get signal() {
+      return ctx.lock?.controller.signal;
+    },
     reply,
     abort(reason) {
       ctx.lock?.abort(reason);
@@ -197,7 +223,28 @@ export async function createConversationContext(
       return ctx.lock?.controller.signal.aborted ?? false;
     },
     dispose,
-  };
+  } as ConversationContext;
+
+  ctx.type = resolveChatType(message);
 
   return ctx;
+}
+
+function resolveChatType(message: Message): ChatType {
+  const Type = message.wechaty.Message.Type;
+
+  switch (message.type()) {
+    case Type.Text:
+      return ChatType.Text;
+    case Type.Image:
+      return ChatType.Image;
+    case Type.Audio:
+      return ChatType.Audio;
+    case Type.Video:
+      return ChatType.Video;
+    case Type.Attachment:
+      return ChatType.File;
+    default:
+      return ChatType.Unknown;
+  }
 }
