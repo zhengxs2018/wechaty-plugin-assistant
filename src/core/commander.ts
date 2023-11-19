@@ -140,6 +140,10 @@ export class Command {
     });
   }
 
+  get commands() {
+    return this.#commands;
+  }
+
   summary(): string | undefined;
   summary(summary: string): Command;
   summary(summary?: string): string | Command | undefined {

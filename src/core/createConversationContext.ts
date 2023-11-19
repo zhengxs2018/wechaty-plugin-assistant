@@ -181,9 +181,19 @@ export async function createConversationContext(
     log.info(`🤖️ [${message.id}] 收到(${talkerName}@${talkerId})的消息`);
   }
 
-  async function reply(sayable: Sayable, finished?: boolean): Promise<void> {
+  /**
+   * @param sayable - 可以被发送的内容
+   * @param finished - 是否结束对话，仅用于输出日志
+   * @param bubble - 是否使用纯气泡模式
+   * @returns
+   */
+  async function reply(
+    sayable: Sayable,
+    finished?: boolean,
+    bubble?: boolean,
+  ): Promise<void> {
     if (room) {
-      if (typeof sayable === 'string') {
+      if (typeof sayable === 'string' || bubble === false) {
         // 群聊中让消息更好看
         await room.say(`\n\n ${sayable}`, talker);
       } else {
