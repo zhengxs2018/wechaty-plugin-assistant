@@ -37,6 +37,15 @@ export async function wechatyMessageHandler(
     } = message;
 
     switch (message.type()) {
+      case Message.Type.Attachment:
+        assistant.call(ctx);
+        break;
+      case Message.Type.Audio:
+        assistant.call(ctx);
+        break;
+      case Message.Type.Image:
+        assistant.call(ctx);
+        break;
       case Message.Type.Text:
         await processTextMessage(assistant, ctx);
         break;

@@ -88,6 +88,30 @@ bot.start();
 
 [文档](./docs/tutorials.md)
 
+## 待办清单
+
+- 特殊消息
+  - 类型：`Message.Type.Unknown`
+  - 功能：拍一拍，语音通话，视频通话
+  - 回复：消息将转为文字发送给 AI
+- 表情消息
+  - 类型：`Message.Type.Emoticon`
+  - 功能：
+  - 回复：纯提示
+- 分享卡片
+  - 类型： `Message.Type.Url`
+  - 功能：文章分享，音乐分享
+  - 回复：提取内容后，转发给 AI 处理
+- 消息撤回
+  - 类型：`Message.Type.Recalled`
+  - 回复：提示对方，如有隐私担忧找开发者沟通
+- 新人入群：
+  - 事件：`room-invite`
+  - 动作：发送欢迎消息
+- 邀请入群
+  - 事件：`room-invite`
+  - 动作：Web 版不支持，发送不支持消息
+
 ## 感谢
 
 - [chatgpt-api](https://github.com/transitive-bullshit/chatgpt-api)
