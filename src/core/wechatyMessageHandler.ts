@@ -22,9 +22,18 @@ export async function wechatyMessageHandler(
   // Note: 有时候不会收到，遂放弃实现自我管理的功能
   if (message.self()) return;
 
+  const {
+    wechaty: { Message, Contact },
+  } = message;
+
   // 如果是群消息，但是没有提到自己，则忽略
-  if (message.room() && !(await message.mentionSelf())) {
-    return;
+  if (message.room()) {
+    if (!(await message.mentionSelf())) return;
+  } else {
+    // Note: 忽略非个人消息，如微信团队发送的消息
+    if (message.talker().type() !== Contact.Type.Individual) {
+      return;
+    }
   }
 
   monitor.stats.message += 1;
@@ -32,10 +41,6 @@ export async function wechatyMessageHandler(
   const ctx = await createConversationContext(assistant, message);
 
   try {
-    const {
-      wechaty: { Message },
-    } = message;
-
     switch (message.type()) {
       case Message.Type.Attachment:
         assistant.call(ctx);
