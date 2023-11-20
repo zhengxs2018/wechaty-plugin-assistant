@@ -1,12 +1,17 @@
 # 教程
 
+非常简陋的文档，会逐步完善的～
+
 ## 自定义模型
+
+方便接入其他平台的模型，或私有模型。
 
 ```ts
 import {
   ChatModel,
   ConversationContext,
   defineLLM,
+  ChatType
 } from '@zhengxs/wechaty-plugin-assistant';
 
 // ============ 基于类  ============
@@ -14,7 +19,7 @@ import {
 class ChatCustom implements ChatModel {
   name = 'custom';
   human_name = '自定义模型';
-
+  input_type: [ChatType.Text], // 此模型接收的消息类型
   call(ctx: ConversationContext) {
     // message 就是 wechaty 的消息模型
     const { message } = ctx;
@@ -29,6 +34,7 @@ class ChatCustom implements ChatModel {
 const llm = defineLLM({
   name: 'custom',
   human_name: '自定义模型',
+  input_type: [ChatType.Text], // 此模型接收的消息类型
   call(ctx: ConversationContext) {
     // message 就是 wechaty 的消息模型
     const { message } = ctx;
@@ -39,7 +45,11 @@ const llm = defineLLM({
 });
 ```
 
-记住当前聊天上下文
+[示例代码](../demo/llm/custom.ts)
+
+## 记录状态
+
+可以通过 `session` 记住当前聊天上下文，通过 `userConfig` 记录用户配置，如：当前模型。
 
 ```ts
 class ChatCustom implements ChatModel {
@@ -48,12 +58,15 @@ class ChatCustom implements ChatModel {
 
   call(ctx: ConversationContext) {
     // message 就是 wechaty 的消息模型
-    const { message, session } = ctx;
+    const { message, session, userConfig } = ctx;
 
     // 参考了 koa-session 模块
     // 可以在这里写入任何支持序列化的数据
     // 会自动保存到缓存中，无需手动处理
     session.view = 1;
+
+    // 注意：这个只隔离了用户，群聊和私聊都是同一个对象
+    userConfig.model = 'erniebot';
 
     // 直接回复发送者，如果在群里会直接 @ 他
     ctx.reply(`hello ${message.text()}`);
@@ -76,7 +89,9 @@ assistant.command.register('ping', function (ctx: ConversationContext) {
 });
 ```
 
-在聊天窗口输入 `/ping`，机器人就会回复 `pong`.
+在聊天窗口输入 `/ping`，机器人就会回复 `pong`。
+
+[示例代码](../demo/command.ts)
 
 ## 使用多模型切换功能
 
@@ -110,6 +125,8 @@ const assistant = createAssistant({
   输出: 当前用户模型和列表
 - 输入: `切换xxx`
   输出：已切换至 xx
+
+[示例代码](../demo/llm/multi-llms.ts)
 
 ## 存储助手状态
 
