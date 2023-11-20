@@ -192,6 +192,11 @@ export async function createConversationContext(
     finished?: boolean,
     bubble?: boolean,
   ): Promise<void> {
+    // Note: 正常情况下，LLM 模型应该通过 control signal 来控制对话的结束
+    // 但某些代理模型，如 bing chat 使用 wss，无法通过 control signal 来控制对话的结束
+    // 这里通过 ctx.aborted 来强制退出对话
+    if (ctx.aborted) return;
+
     if (room) {
       if (typeof sayable === 'string' || bubble === false) {
         // 群聊中让消息更好看
