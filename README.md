@@ -84,6 +84,21 @@ bot.start();
 | Google Bard |                                                                                   | -             | N/A   |
 | More...     |                                                                                   | -             | N/A   |
 
+## 本地开发
+
+你应该使用 `node.js >= 18` 和 `pnpm` 运行本项目。
+
+```sh
+# 安装依赖
+$ pnpm install
+
+# 启动服务
+$ pnpm dev
+
+# 执行目标文件代码，task 后面跟文件地址
+$ pnpm task ./samples/llm/custom.ts
+```
+
 ## 使用教程
 
 [文档](./docs/tutorials.md)
