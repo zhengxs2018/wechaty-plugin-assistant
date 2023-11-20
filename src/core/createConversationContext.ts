@@ -281,7 +281,7 @@ export async function createConversationContext(
   return ctx;
 }
 
-function resolveChatType(message: Message): ChatType {
+export function resolveChatType(message: Message): ChatType {
   const Type = message.wechaty.Message.Type;
 
   switch (message.type()) {

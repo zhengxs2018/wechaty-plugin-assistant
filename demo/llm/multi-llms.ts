@@ -2,9 +2,10 @@ import {
   ChatClaudeAI,
   ChatERNIEBot,
   createAssistant,
+  createMockContext,
+  createMockTextMessage,
   MultiChatModelSwitch,
-} from '../src';
-import { run } from './_wechaty';
+} from '../../src';
 
 const assistant = createAssistant({
   llm: new MultiChatModelSwitch([
@@ -18,4 +19,6 @@ const assistant = createAssistant({
   ]),
 });
 
-run(assistant);
+const ctx = createMockContext(createMockTextMessage('切换 claude'));
+
+assistant.call(ctx);
