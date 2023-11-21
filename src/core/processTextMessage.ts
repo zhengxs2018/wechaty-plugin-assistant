@@ -1,8 +1,7 @@
 import { codeBlock } from 'common-tags';
 
+import { type Assistant, type ConversationContext } from '../interfaces';
 import { toSingleQuotes } from '../vendors';
-import { type Assistant } from './createAssistant';
-import { type ConversationContext } from './createConversationContext';
 
 const REF_MSG_SEP = '- - - - - - - - - - - - - - -';
 
@@ -17,6 +16,7 @@ function cleanUserMessage(content: string): string {
 }
 
 export async function processTextMessage(
+  controller: AbortController,
   assistant: Assistant,
   ctx: ConversationContext,
 ) {
@@ -44,10 +44,18 @@ export async function processTextMessage(
       .trim();
   }
 
+  // Note: 如果以斜线开头当作指令处理
+  // 并且指令允许重复触发
+  if (text.startsWith('/')) {
+    monitor.stats.command += 1;
+
+    await assistant.command.parse(ctx, text.split(' '));
+    return;
+  }
+
   if (['停止', '停止回复'].includes(text)) {
     if (ctx.isLocked) {
       monitor.stats.skipped += 1;
-
       ctx.abort();
     }
 
@@ -73,15 +81,14 @@ export async function processTextMessage(
       好的，让我们重新开始聊天吧！你有什么想和我聊的吗？`);
   }
 
-  // Note: 如果以斜线开头当作指令处理
-  // 并且指令允许重复触发
-  if (text.startsWith('/')) {
-    monitor.stats.command += 1;
+  // Note: 可以解决提升多模型切换命令的优先级
+  await assistant.hooks.onPrepareTextMessage.process(
+    controller,
+    ctx,
+    assistant,
+  );
 
-    await assistant.command.parse(ctx, text.split(' '));
-
-    return;
-  }
+  if (controller.signal.aborted) return;
 
   // 防止重复提问
   if (ctx.isLocked) {

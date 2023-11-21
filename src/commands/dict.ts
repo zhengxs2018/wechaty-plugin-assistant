@@ -1,7 +1,7 @@
 import { codeBlock } from 'common-tags';
 import { log } from 'wechaty';
 
-import { Command } from '../core/commander';
+import { Command } from '../integrations/commander';
 
 const cmd = new Command('dict', {
   required: true,

@@ -1,6 +1,6 @@
 import { type Wechaty } from 'wechaty';
 
-import { type Assistant } from './createAssistant';
+import { type Assistant } from '../interfaces';
 
 export async function wechatyPluginCallback(
   assistant: Assistant,

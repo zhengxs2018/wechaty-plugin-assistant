@@ -2,8 +2,8 @@ import { AssertionError } from 'node:assert';
 
 import { codeBlock } from 'common-tags';
 
-import { Command } from '../core/commander';
 import { DeepL, type DeepLTranslationOptions } from '../integrations';
+import { Command } from '../integrations/commander';
 
 const api = new DeepL();
 

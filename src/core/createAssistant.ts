@@ -1,88 +1,29 @@
 import { codeBlock } from 'common-tags';
-import {
-  type ContactSelf,
-  Message,
-  type Wechaty,
-  type WechatyPlugin,
-} from 'wechaty';
 
 import commands from '../commands';
-import { Command } from './commander';
-import {
-  type AssistantMonitor,
-  createAssistantMonitor,
-} from './createAssistantMonitor';
-import { type ConversationContext } from './createConversationContext';
-import {
-  type AssistantConfig,
-  type AssistantOptions,
-  resolveAssistantOptions,
-} from './resolveAssistantOptions';
+import { Command } from '../integrations/commander';
+import { type Assistant, type AssistantConfig } from '../interfaces';
+import { createAssistantHooks } from './createAssistantHooks';
+import { createAssistantMonitor } from './createAssistantMonitor';
+import { resolveAssistantOptions } from './resolveAssistantOptions';
+import { setupConfigAndLLM } from './setupConfigAndLLM';
 import { wechatyMessageHandler } from './wechatyMessageHandler';
 import { wechatyPluginCallback } from './wechatyPluginCallback';
-
-export interface Assistant {
-  /**
-   * 助手的配置
-   */
-  options: AssistantOptions;
-
-  /**
-   * 助手的监控器
-   */
-  monitor: AssistantMonitor;
-
-  /**
-   * 聊天指令
-   */
-  command: Command;
-
-  /**
-   * 当前机器人登录的用户
-   */
-  chatbotUser?: ContactSelf | null;
-
-  /**
-   * wechaty 实例
-   */
-  wechaty?: Wechaty | null;
-
-  /**
-   * 消息监听器
-   */
-  handler: (message: Message) => Promise<void>;
-
-  /**
-   * 插件回调
-   */
-  callback: () => WechatyPlugin;
-
-  /**
-   * 调用大语言模型
-   */
-  call(ctx: ConversationContext): Promise<void>;
-
-  /**
-   * 启动助手
-   */
-  run(): void;
-
-  /**
-   * 停止助手
-   */
-  stop(): void;
-}
 
 export function createAssistant(config: AssistantConfig) {
   const options = resolveAssistantOptions(config);
 
+  const hooks = createAssistantHooks();
   const monitor = createAssistantMonitor();
 
-  const program = new Command('assistant');
+  const program = new Command('program');
+
+  const { llm } = options;
 
   const assistant: Assistant = {
     options,
     monitor,
+    hooks,
     chatbotUser: null,
     wechaty: null,
     command: program,
@@ -91,8 +32,6 @@ export function createAssistant(config: AssistantConfig) {
       return bot => void wechatyPluginCallback(assistant, bot);
     },
     async call(ctx) {
-      const { llm } = options;
-
       if (llm.input_type.includes(ctx.type)) {
         await llm.call(ctx, assistant);
       } else {
@@ -116,6 +55,8 @@ export function createAssistant(config: AssistantConfig) {
   program.addCommand(commands.hot);
   program.addCommand(commands.moyu);
   program.addCommand(commands.kfc);
+
+  setupConfigAndLLM(options, assistant);
 
   return assistant;
 }

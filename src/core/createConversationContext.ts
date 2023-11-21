@@ -1,151 +1,17 @@
 import { FileBox, type FileBoxInterface } from 'file-box';
 import { log, type Message, type Sayable } from 'wechaty';
 
+import {
+  type Assistant,
+  ChatType,
+  type ConversationContext,
+} from '../interfaces';
 import { md5, sleep } from '../util';
-import { type Assistant } from './createAssistant';
-import { type LockInfo } from './createAssistantMonitor';
-import {
-  type ConversationSession,
-  createConversationSession,
-} from './createConversationSession';
-import {
-  createConversationUserConfig,
-  type UserConfig,
-} from './createConversationUserConfig';
-
-/**
- * 输入类型
- */
-export enum ChatType {
-  Text = 'text',
-  Image = 'image',
-  Audio = 'audio',
-  Video = 'video',
-  File = 'file',
-  Unknown = 'unknown',
-}
-
-export type ConversationContext = {
-  /**
-   * 对话ID
-   */
-  conversationId: string;
-
-  /**
-   * 对话标题
-   */
-  conversationTitle?: string;
-
-  /**
-   * 发送者ID
-   */
-  talkerId: string;
-
-  /**
-   * 发送者昵称
-   */
-  talkerName: string;
-
-  /**
-   * 聊天机器人的名称
-   */
-  chatbotUserName: string;
-
-  /**
-   * 是否是管理员
-   */
-  isAdmin: boolean;
-
-  /**
-   * 聊天类型
-   */
-  type: ChatType;
-
-  /**
-   * 消息内容 {@link Message}
-   */
-  message: Message;
-
-  /**
-   * 临时数据
-   */
-  session: ConversationSession;
-
-  /**
-   * 用户配置
-   */
-  userConfig: UserConfig;
-
-  /**
-   * 快速回复给发送者
-   *
-   * @param sayable - 可以被发送的内容
-   * @param finished - 是否结束对话，仅用于输出日志
-   */
-  reply: (sayable: Sayable, finished?: boolean) => Promise<void>;
-
-  /**
-   * 发送远程文件给发送者
-   *
-   * 每次文件发送后，会等待 460ms
-   */
-  sendFileFromUrl(url: string, name?: string): Promise<void>;
-
-  /**
-   * 发送文件给发送者
-   *
-   * 每次文件发送后，会等待 460ms
-   */
-  sendFileBox(
-    file: FileBoxInterface,
-    callback: (err: Error) => any,
-  ): Promise<void>;
-
-  /**
-   * 创建一个锁定 {@link LockInfo}
-   * @returns
-   */
-  createLock: () => LockInfo;
-
-  /**
-   * 释放锁定 {@link LockInfo}
-   */
-  releaseLock: () => void;
-
-  /**
-   * 当前上下文锁对象 {@link LockInfo}
-   */
-  lock?: LockInfo | null;
-
-  /**
-   * 中断信号
-   */
-  readonly signal: AbortSignal | undefined;
-
-  /**
-   * 是否被锁定
-   *
-   * 解决同一个人发送多条消息时，多次触发对话的问题
-   */
-  readonly isLocked: boolean;
-
-  /**
-   * 中断对话 {@link LockInfo.abort}
-   */
-  abort: (reason?: any) => void;
-
-  /**
-   * 是否已经中断 {@link LockInfo.aborted}
-   */
-  readonly aborted: boolean;
-
-  /**
-   * 释放资源，并存储过程数据
-   */
-  dispose: () => void;
-};
+import { createConversationSession } from './createConversationSession';
+import { createUserConfig } from './createUserConfig';
 
 export async function createConversationContext(
+  controller: AbortController,
   assistant: Assistant,
   message: Message,
 ): Promise<ConversationContext> {
@@ -168,17 +34,19 @@ export async function createConversationContext(
     await Promise.all([
       room?.topic(),
       message.wechaty.currentUser.name(),
-      createConversationUserConfig(cache, talkerId),
+      createUserConfig(cache, talkerId),
       createConversationSession(cache, conversationId),
     ]);
 
   // 消息日志
-  if (room) {
-    log.info(
-      `🤖️ [${message.id}] 在房间 (${conversationTitle}) 收到(${talkerName}@${talkerId})的消息`,
-    );
-  } else {
-    log.info(`🤖️ [${message.id}] 收到(${talkerName}@${talkerId})的消息`);
+  if (assistant.options.debug) {
+    if (room) {
+      log.info(
+        `🤖️ [${message.id}] 在房间 (${conversationTitle}) 收到(${talkerName}@${talkerId})的消息`,
+      );
+    } else {
+      log.info(`🤖️ [${message.id}] 收到(${talkerName}@${talkerId})的消息`);
+    }
   }
 
   /**
@@ -197,6 +65,7 @@ export async function createConversationContext(
     // 这里通过 ctx.aborted 来强制退出对话
     if (ctx.aborted) return;
 
+    // TODO: 是否可以直接使用 message.say 方法
     if (room) {
       if (typeof sayable === 'string' || bubble === false) {
         // 群聊中让消息更好看
@@ -208,19 +77,25 @@ export async function createConversationContext(
       await talker.say(sayable);
     }
 
-    if (!finished) return;
-
-    // 消息日志
-    if (room) {
-      log.info(
-        `🤖️ [${message.id}] 在房间 (${conversationTitle}) 回复 (${talkerName}@${talkerId}) 的消息`,
-      );
-    } else {
-      log.info(`🤖️ [${message.id}] 回复(${talkerName}@${talkerId})的消息`);
+    if (finished && assistant.options.debug) {
+      // 消息日志
+      if (room) {
+        log.info(
+          `🤖️ [${message.id}] 在房间 (${conversationTitle}) 回复 (${talkerName}@${talkerId}) 的消息`,
+        );
+      } else {
+        log.info(`🤖️ [${message.id}] 回复(${talkerName}@${talkerId})的消息`);
+      }
     }
   }
 
-  const dispose = () => {
+  const dispose = async () => {
+    await assistant.hooks.onContextDestroyed.process(
+      controller,
+      ctx,
+      assistant,
+    );
+
     session.restore();
     userConfig.restore();
   };
@@ -282,6 +157,8 @@ export async function createConversationContext(
     },
     dispose,
   };
+
+  await assistant.hooks.onContextCreated.process(controller, ctx, assistant);
 
   return ctx;
 }

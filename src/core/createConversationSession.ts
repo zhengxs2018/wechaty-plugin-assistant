@@ -1,16 +1,9 @@
-import { type MemoryCache } from './createMemoryCache';
-
-export type ConversationSession = {
-  restore: () => Promise<void>;
-  clear: () => Promise<void>;
-
-  [key: string]: any;
-};
+import { type MemoryCache, type State } from '../interfaces';
 
 export async function createConversationSession(
   cache: MemoryCache,
   conversationId: string,
-): Promise<ConversationSession> {
+): Promise<State> {
   const key = `assistant:session:${conversationId}`;
 
   const state = (await cache.get(key)) || {};
@@ -38,5 +31,5 @@ export async function createConversationSession(
     },
   });
 
-  return state as ConversationSession;
+  return state as State;
 }

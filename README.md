@@ -96,7 +96,7 @@ bot.start();
 | 名称     | 描述                                                                                                                          | 状态  |
 | -------- | ----------------------------------------------------------------------------------------------------------------------------- | ----- |
 | `/deepl` | DeepL 翻译，感谢 [bob-plugin-akl-deepl-free-translate][bob-plugin-deepl] 提供的代码 以及 [deepL](https://deepl.com/) 提供服务 | Alpha |
-| `/dic`   | 汉字解释，感谢 [Pear][pear-api] 提供的 API                                                                                    | Alpha |
+| `/dict`  | 汉字解释，感谢 [Pear][pear-api] 提供的 API                                                                                    | Alpha |
 | `/hot`   | 热搜榜，感谢 [韩小韩][han-api] 提供的 API                                                                                     | Alpha |
 | `/kfc`   | 疯狂星期四文案，感谢 [Brick][brick-api] 提供的 API                                                                            | Alpha |
 | `/moyu`  | 摸鱼日历，感谢 [韩小韩][brick-api] 提供的 API 以及 摸鱼日历 提供的图片                                                        | Alpha |

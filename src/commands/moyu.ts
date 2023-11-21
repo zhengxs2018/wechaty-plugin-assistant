@@ -1,6 +1,6 @@
 import { codeBlock } from 'common-tags';
 
-import { Command } from '../core/commander';
+import { Command } from '../integrations/commander';
 
 const cmd = new Command('my', {
   summary: '摸鱼日历',

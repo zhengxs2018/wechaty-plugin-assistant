@@ -1,6 +1,7 @@
 import { Message, type Sayable } from 'wechaty';
 
-import { ConversationContext, resolveChatType } from '../core';
+import { resolveChatType } from '../core';
+import { type ConversationContext } from '../interfaces';
 import { md5 } from '../util';
 import { createMockTextMessage } from './message';
 
@@ -62,5 +63,5 @@ export const createMockContext = (
       return Promise.resolve();
     },
     dispose: () => void 0,
-  } as ConversationContext;
+  } as unknown as ConversationContext;
 };

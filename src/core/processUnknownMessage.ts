@@ -1,7 +1,6 @@
 import { codeBlock } from 'common-tags';
 
-import { type Assistant } from './createAssistant';
-import { ConversationContext } from './createConversationContext';
+import { type Assistant, type ConversationContext } from '../interfaces';
 
 // TODO 可以考虑将该消息转发二次开发者处理
 export async function processUnknownMessage(

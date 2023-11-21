@@ -1,8 +1,8 @@
 import { codeBlock } from 'common-tags';
 import { log, type Message } from 'wechaty';
 
+import { type Assistant } from '../interfaces';
 import { castToError } from '../util';
-import { type Assistant } from './createAssistant';
 import { createConversationContext } from './createConversationContext';
 import { processTextMessage } from './processTextMessage';
 import { processUnknownMessage } from './processUnknownMessage';
@@ -26,19 +26,47 @@ export async function wechatyMessageHandler(
     wechaty: { Message, Contact },
   } = message;
 
+  // Note: 忽略非个人消息，如微信团队发送的消息
+  if (message.talker().type() !== Contact.Type.Individual) return;
+
+  // 提供给钩子的中断控制器
+  const controller = new AbortController();
+
+  // Note: 黑名单拦截功能需要使用
+  await assistant.hooks.onMessage.process(controller, assistant, message);
+
+  if (controller.signal.aborted) return;
+
   // 如果是群消息，但是没有提到自己，则忽略
   if (message.room()) {
+    await assistant.hooks.onRoomMessage.process(controller, assistant, message);
+
+    if (controller.signal.aborted) return;
+
     if (!(await message.mentionSelf())) return;
+
+    await assistant.hooks.onRoomMentionSelfMessage.process(
+      controller,
+      assistant,
+      message,
+    );
+
+    if (controller.signal.aborted) return;
   } else {
-    // Note: 忽略非个人消息，如微信团队发送的消息
-    if (message.talker().type() !== Contact.Type.Individual) {
-      return;
-    }
+    await assistant.hooks.onIndividualMessage.process(
+      controller,
+      assistant,
+      message,
+    );
+
+    if (controller.signal.aborted) return;
   }
 
   monitor.stats.message += 1;
 
-  const ctx = await createConversationContext(assistant, message);
+  const ctx = await createConversationContext(controller, assistant, message);
+
+  if (controller.signal.aborted) return;
 
   try {
     switch (message.type()) {
@@ -52,7 +80,7 @@ export async function wechatyMessageHandler(
         assistant.call(ctx);
         break;
       case Message.Type.Text:
-        await processTextMessage(assistant, ctx);
+        await processTextMessage(controller, assistant, ctx);
         break;
       default:
         await processUnknownMessage(assistant, ctx);
@@ -60,17 +88,11 @@ export async function wechatyMessageHandler(
 
     monitor.stats.success += 1;
   } catch (err) {
-    if (ctx.aborted) return;
+    if (controller.signal.aborted || ctx.aborted) return;
 
     monitor.stats.failure += 1;
 
     const error = castToError(err);
-
-    assistant.options.notifications?.messageProcessFailed(
-      error,
-      message,
-      assistant,
-    );
 
     log.error(error.message);
 
