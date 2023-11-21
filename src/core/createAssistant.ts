@@ -6,6 +6,7 @@ import {
   type WechatyPlugin,
 } from 'wechaty';
 
+import commands from '../commands';
 import { Command } from './commander';
 import {
   type AssistantMonitor,
@@ -77,12 +78,14 @@ export function createAssistant(config: AssistantConfig) {
 
   const monitor = createAssistantMonitor();
 
+  const program = new Command('assistant');
+
   const assistant: Assistant = {
     options,
     monitor,
     chatbotUser: null,
     wechaty: null,
-    command: new Command('assistant'),
+    command: program,
     handler: message => wechatyMessageHandler(assistant, message),
     callback: () => {
       return bot => void wechatyPluginCallback(assistant, bot);
@@ -107,6 +110,12 @@ export function createAssistant(config: AssistantConfig) {
       monitor.running = false;
     },
   };
+
+  program.addCommand(commands.deepl);
+  program.addCommand(commands.dict);
+  program.addCommand(commands.hot);
+  program.addCommand(commands.moyu);
+  program.addCommand(commands.kfc);
 
   return assistant;
 }

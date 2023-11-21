@@ -16,14 +16,18 @@ dictionaries:
 words:
   - aistudio
   - claudeai
+  - deepl
   - dingtalk
   - erniebot
   - GPTAPI
+  - hotlist
   - jiti
   - keyv
   - langchain
+  - languagedetect
   - llmapi
   - llms
+  - moyu
   - msgtype
   - openai
   - preinstall
