@@ -50,7 +50,7 @@ export class MultiChatModelSwitch implements ChatModel {
       controller.abort();
 
       // TODO: 需要停止之前的对话？
-      // ctx.abort();
+      ctx.abort();
 
       const searchName = text.split('切换')[1]?.trim();
 
@@ -61,7 +61,9 @@ export class MultiChatModelSwitch implements ChatModel {
           模型列表
           ${Array.from(this.llms.values())
             .map(llm => `  - ${llm.human_name}`)
-            .join(`\n`)}`);
+            .join(`\n`)}
+
+          提示：必须带 “切换” 关键字，但模型名称支持模糊匹配。`);
       }
 
       const found = this.find(searchName.toString());
@@ -83,7 +85,9 @@ export class MultiChatModelSwitch implements ChatModel {
       模型列表
       ${Array.from(this.llms.values())
         .map(llm => `  - ${llm.human_name}`)
-        .join(`\n`)}`);
+        .join(`\n`)}
+
+      提示：必须带 “切换” 关键字，但模型名称支持模糊匹配。`);
     }
   }
 
