@@ -1,6 +1,6 @@
 {
   "name": "@zhengxs/wechaty-plugin-assistant",
-  "version": "0.1.0-alpha.18",
+  "version": "0.1.0-alpha.19",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "description": "基于 wechaty 的聊天助手插件",
