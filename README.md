@@ -91,6 +91,16 @@ bot.start();
 | Google Bard |                                                                                   | -             | N/A   |
 | More...     |                                                                                   | -             | N/A   |
 
+## 内置指令
+
+| 名称     | 描述                                                                                                                          | 状态  |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `/deepl` | DeepL 翻译，感谢 [bob-plugin-akl-deepl-free-translate][bob-plugin-deepl] 提供的代码 以及 [deepL](https://deepl.com/) 提供服务 | Alpha |
+| `/dic`   | 汉字解释，感谢 [Pear][pear-api] 提供的 API                                                                                    | Alpha |
+| `/hot`   | 热搜榜，感谢 [韩小韩][han-api] 提供的 API                                                                                     | Alpha |
+| `/kfc`   | 疯狂星期四文案，感谢 [Brick][brick-api] 提供的 API                                                                            | Alpha |
+| `/moyu`  | 摸鱼日历，感谢 [韩小韩][brick-api] 提供的 API 以及 摸鱼日历 提供的图片                                                        | Alpha |
+
 ## 本地开发
 
 你应该使用 `node.js >= 18` 和 `pnpm` 运行本项目。
@@ -149,3 +159,7 @@ MIT
 
 [apifox]: https://openai-proxy.apifox.cn/
 [openai-proxy]: https://www.openai-proxy.com/
+[bob-plugin-deepl]: https://github.com/akl7777777/bob-plugin-akl-deepl-free-translate
+[pear-api]: https://api.pearktrue.cn/
+[han-api]: https://api.vvhan.com/
+[brick-api]: https://api.001500.cn/

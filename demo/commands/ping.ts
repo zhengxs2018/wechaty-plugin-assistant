@@ -1,4 +1,4 @@
-import { ChatType, createAssistant, createMockContext } from '../src';
+import { ChatType, createAssistant, createMockContext } from '../../src';
 
 const assistant = createAssistant({
   llm: {
