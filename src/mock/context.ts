@@ -63,5 +63,5 @@ export const createMockContext = (
       return Promise.resolve();
     },
     dispose: () => void 0,
-  } as ConversationContext;
+  } as unknown as ConversationContext;
 };

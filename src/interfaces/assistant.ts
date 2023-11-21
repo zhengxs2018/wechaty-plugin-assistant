@@ -7,8 +7,13 @@ import {
 
 import { Command } from '../integrations';
 import { type ConversationContext } from './context';
+import { type HookQueue, type HooksName } from './hooks';
 import { type AssistantMonitor } from './monitor';
 import { type AssistantOptions } from './options';
+
+export type AssistantHooks = {
+  [K in HooksName]: HookQueue<K>;
+};
 
 export interface Assistant {
   /**
@@ -25,6 +30,11 @@ export interface Assistant {
    * 聊天指令
    */
   command: Command;
+
+  /**
+   * 助手的钩子
+   */
+  hooks: AssistantHooks;
 
   /**
    * 当前机器人登录的用户

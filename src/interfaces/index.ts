@@ -6,3 +6,4 @@ export * from './options';
 export * from './monitor';
 export * from './lock';
 export * from './typescript';
+export * from './hooks';

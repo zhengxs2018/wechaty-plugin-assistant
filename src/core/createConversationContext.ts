@@ -11,6 +11,7 @@ import { createConversationSession } from './createConversationSession';
 import { createUserConfig } from './createUserConfig';
 
 export async function createConversationContext(
+  controller: AbortController,
   assistant: Assistant,
   message: Message,
 ): Promise<ConversationContext> {
@@ -38,12 +39,14 @@ export async function createConversationContext(
     ]);
 
   // 消息日志
-  if (room) {
-    log.info(
-      `🤖️ [${message.id}] 在房间 (${conversationTitle}) 收到(${talkerName}@${talkerId})的消息`,
-    );
-  } else {
-    log.info(`🤖️ [${message.id}] 收到(${talkerName}@${talkerId})的消息`);
+  if (assistant.options.debug) {
+    if (room) {
+      log.info(
+        `🤖️ [${message.id}] 在房间 (${conversationTitle}) 收到(${talkerName}@${talkerId})的消息`,
+      );
+    } else {
+      log.info(`🤖️ [${message.id}] 收到(${talkerName}@${talkerId})的消息`);
+    }
   }
 
   /**
@@ -62,6 +65,7 @@ export async function createConversationContext(
     // 这里通过 ctx.aborted 来强制退出对话
     if (ctx.aborted) return;
 
+    // TODO: 是否可以直接使用 message.say 方法
     if (room) {
       if (typeof sayable === 'string' || bubble === false) {
         // 群聊中让消息更好看
@@ -73,19 +77,25 @@ export async function createConversationContext(
       await talker.say(sayable);
     }
 
-    if (!finished) return;
-
-    // 消息日志
-    if (room) {
-      log.info(
-        `🤖️ [${message.id}] 在房间 (${conversationTitle}) 回复 (${talkerName}@${talkerId}) 的消息`,
-      );
-    } else {
-      log.info(`🤖️ [${message.id}] 回复(${talkerName}@${talkerId})的消息`);
+    if (finished && assistant.options.debug) {
+      // 消息日志
+      if (room) {
+        log.info(
+          `🤖️ [${message.id}] 在房间 (${conversationTitle}) 回复 (${talkerName}@${talkerId}) 的消息`,
+        );
+      } else {
+        log.info(`🤖️ [${message.id}] 回复(${talkerName}@${talkerId})的消息`);
+      }
     }
   }
 
-  const dispose = () => {
+  const dispose = async () => {
+    await assistant.hooks.onContextDestroyed.process(
+      controller,
+      ctx,
+      assistant,
+    );
+
     session.restore();
     userConfig.restore();
   };
@@ -147,6 +157,8 @@ export async function createConversationContext(
     },
     dispose,
   };
+
+  await assistant.hooks.onContextCreated.process(controller, ctx, assistant);
 
   return ctx;
 }

@@ -19,38 +19,20 @@ export class MultiChatModelSwitch implements ChatModel {
   constructor(llms: ChatModel[]) {
     this.llm = llms[0];
     this.llms = new Map(llms.map(llm => [llm.name, llm]));
-    this.input_type = llms.map(llm => llm.input_type).flat();
+    this.input_type = Array.from(
+      new Set(llms.map(llm => llm.input_type).flat()),
+    );
   }
 
-  async call(ctx: ConversationContext, assistant: Assistant) {
-    // TODO 类型转为字符串，移动到 core 中
-    if (ctx.type === ChatType.Text) {
-      return this.processText(ctx, assistant);
-    }
-
-    return this.calling(ctx, assistant);
-  }
-
-  protected async calling(ctx: ConversationContext, assistant: Assistant) {
-    const llm = this.resolve(ctx.userConfig.model);
-    if (!llm) return;
-
-    if (llm.input_type.includes(ctx.type)) {
-      return llm.call(ctx, assistant);
-    }
-
-    ctx.reply(codeBlock`
-      ⊶ 系统提示
-      ﹊
-      ${llm.human_name} 暂不支持处理此类消息！`);
-  }
-
-  protected processText(ctx: ConversationContext, assistant: Assistant) {
+  onPrepareTextMessage(controller: AbortController, ctx: ConversationContext) {
     const { message, userConfig } = ctx;
     const text = message.text();
 
     if (text === '查看模型') {
       const llm = this.resolve(userConfig.model);
+
+      // 中断后续处理
+      controller.abort();
 
       return ctx.reply(codeBlock`
       ⊶ 系统提示
@@ -64,7 +46,14 @@ export class MultiChatModelSwitch implements ChatModel {
     }
 
     if (text.startsWith('切换')) {
+      // 中断后续处理
+      controller.abort();
+
+      // TODO: 需要停止之前的对话？
+      // ctx.abort();
+
       const searchName = text.split('切换')[1]?.trim();
+
       if (!searchName) {
         return ctx.reply(codeBlock`
           ⊶ 系统提示
@@ -96,8 +85,26 @@ export class MultiChatModelSwitch implements ChatModel {
         .map(llm => `  - ${llm.human_name}`)
         .join(`\n`)}`);
     }
+  }
 
-    return this.calling(ctx, assistant);
+  async call(ctx: ConversationContext, assistant: Assistant) {
+    const llm = this.resolve(ctx.userConfig.model);
+
+    if (!llm) {
+      return ctx.reply(codeBlock`
+      ⊶ 系统提示
+      ﹊
+      暂无可用的 AI 模型！`);
+    }
+
+    if (llm.input_type.includes(ctx.type)) {
+      return llm.call(ctx, assistant);
+    }
+
+    ctx.reply(codeBlock`
+      ⊶ 系统提示
+      ﹊
+      ${llm.human_name} 暂不支持处理此类消息！`);
   }
 
   protected resolve(name?: string): ChatModel | undefined {

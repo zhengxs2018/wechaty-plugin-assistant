@@ -133,5 +133,5 @@ export type ConversationContext = {
   /**
    * 释放资源，并存储过程数据
    */
-  dispose: () => void;
+  dispose: () => Promise<void>;
 };
