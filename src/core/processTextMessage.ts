@@ -1,8 +1,7 @@
 import { codeBlock } from 'common-tags';
 
+import { type Assistant, type ConversationContext } from '../interfaces';
 import { toSingleQuotes } from '../vendors';
-import { type Assistant } from './createAssistant';
-import { type ConversationContext } from './createConversationContext';
 
 const REF_MSG_SEP = '- - - - - - - - - - - - - - -';
 

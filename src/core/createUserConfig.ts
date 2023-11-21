@@ -1,16 +1,9 @@
-import { type MemoryCache } from './createMemoryCache';
+import { type MemoryCache, State } from '../interfaces';
 
-export type UserConfig = {
-  restore: () => Promise<void>;
-  clear: () => Promise<void>;
-
-  [key: string]: any;
-};
-
-export async function createConversationUserConfig(
+export async function createUserConfig(
   cache: MemoryCache,
   talkerId: string,
-): Promise<UserConfig> {
+): Promise<State> {
   const key = `user:config:${talkerId}`;
 
   const state = (await cache.get(key)) || {};
@@ -38,5 +31,5 @@ export async function createConversationUserConfig(
     },
   });
 
-  return state as UserConfig;
+  return state as State;
 }

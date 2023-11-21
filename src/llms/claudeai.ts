@@ -1,6 +1,10 @@
 import { codeBlock } from 'common-tags';
 
-import { type ChatModel, ChatType, type ConversationContext } from '../core';
+import {
+  type ChatModel,
+  ChatType,
+  type ConversationContext,
+} from '../interfaces';
 import { ClaudeAI, type ClaudeAIOptions } from '../llmapi';
 import { PQueue } from '../vendors';
 

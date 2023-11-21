@@ -5,7 +5,7 @@ import {
   type ChatModel,
   ChatType,
   type ConversationContext,
-} from '../core';
+} from '../interfaces';
 
 export class MultiChatModelSwitch implements ChatModel {
   name: string = 'multi-model';

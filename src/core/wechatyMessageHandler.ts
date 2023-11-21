@@ -1,8 +1,8 @@
 import { codeBlock } from 'common-tags';
 import { log, type Message } from 'wechaty';
 
+import { type Assistant } from '../interfaces';
 import { castToError } from '../util';
-import { type Assistant } from './createAssistant';
 import { createConversationContext } from './createConversationContext';
 import { processTextMessage } from './processTextMessage';
 import { processUnknownMessage } from './processUnknownMessage';

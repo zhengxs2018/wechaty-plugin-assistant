@@ -1,8 +1,7 @@
 import { codeBlock } from 'common-tags';
 import minimist from 'minimist';
 
-import { type Assistant } from './createAssistant';
-import { type ConversationContext } from './createConversationContext';
+import { type Assistant, type ConversationContext } from '../interfaces';
 
 export interface OptionParams {
   alias?: string;

@@ -1,8 +1,5 @@
-import { type Assistant } from './createAssistant';
-import {
-  ChatType,
-  type ConversationContext,
-} from './createConversationContext';
+import { type Assistant } from './assistant';
+import { ChatType, type ConversationContext } from './context';
 
 type MaybePromise<T> = T | Promise<T>;
 
@@ -31,5 +28,3 @@ export interface ChatModel {
    */
   call(context: ConversationContext, assistant: Assistant): MaybePromise<void>;
 }
-
-export const defineLLM = (model: ChatModel): ChatModel => model;
