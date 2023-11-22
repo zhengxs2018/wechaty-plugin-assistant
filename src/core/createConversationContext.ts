@@ -27,7 +27,7 @@ export async function createConversationContext(
 
   const {
     monitor,
-    options: { maintainers, cache },
+    options: { debug, maintainers, cache },
   } = assistant;
 
   const [conversationTitle, chatbotUserName, userConfig, session] =
@@ -39,7 +39,7 @@ export async function createConversationContext(
     ]);
 
   // 消息日志
-  if (assistant.options.debug) {
+  if (debug) {
     if (room) {
       log.info(
         `🤖️ [${message.id}] 在房间 (${conversationTitle}) 收到(${talkerName}@${talkerId})的消息`,
@@ -77,7 +77,7 @@ export async function createConversationContext(
       await talker.say(sayable);
     }
 
-    if (finished && assistant.options.debug) {
+    if (finished && debug) {
       // 消息日志
       if (room) {
         log.info(
@@ -114,6 +114,18 @@ export async function createConversationContext(
     await sendFileBox(FileBox.fromUrl(url, { name }), () => ctx.reply(url));
   }
 
+  function createLock() {
+    ctx.lock = monitor.defineLock({
+      id: conversationId,
+      messageId: message.id,
+      conversationTitle,
+      talkerId: talkerId,
+      talkerName: talkerName,
+    });
+
+    return ctx.lock;
+  }
+
   const ctx: ConversationContext = {
     conversationId,
     conversationTitle,
@@ -129,17 +141,7 @@ export async function createConversationContext(
     sendFileBox,
     sendFileFromUrl,
     lock: null,
-    createLock() {
-      ctx.lock = monitor.defineLock({
-        id: conversationId,
-        messageId: message.id,
-        conversationTitle,
-        talkerId: talkerId,
-        talkerName: talkerName,
-      });
-
-      return ctx.lock;
-    },
+    createLock,
     releaseLock() {
       monitor.releaseLock(conversationId);
     },
@@ -150,7 +152,9 @@ export async function createConversationContext(
       return ctx.lock?.controller.signal;
     },
     abort(reason) {
-      ctx.lock?.abort(reason);
+      // Note: 强制中止对话
+      // 以支持某些口令，如：切换模型，停止对话
+      createLock().abort(reason);
     },
     get aborted() {
       return ctx.lock?.controller.signal.aborted ?? false;

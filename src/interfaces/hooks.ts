@@ -73,6 +73,11 @@ export interface Hooks {
    * 处理文本消息
    */
   onPrepareTextMessage: ExtendsHook<ConversationContext>;
+
+  /**
+   * 处理文件消息
+   */
+  onPrepareFileMessage: ExtendsHook<ConversationContext>;
 }
 
 /**

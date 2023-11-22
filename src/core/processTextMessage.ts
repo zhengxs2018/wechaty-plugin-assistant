@@ -5,6 +5,10 @@ import { toSingleQuotes } from '../vendors';
 
 const REF_MSG_SEP = '- - - - - - - - - - - - - - -';
 
+const stopWords = ['停', '停止', '停止回复'];
+
+const newWords = ['新对话', '新聊天', '重新开始', '重置'];
+
 /**
  * 清理用户消息
  *
@@ -25,6 +29,8 @@ export async function processTextMessage(
   // 拒绝空内容
   let text = message.text().trim();
   if (!text) {
+    controller.abort();
+
     return reply(codeBlock`
       ⊶ 系统提示
       ﹊
@@ -53,7 +59,7 @@ export async function processTextMessage(
     return;
   }
 
-  if (['停止', '停止回复'].includes(text)) {
+  if (stopWords.includes(text)) {
     if (ctx.isLocked) {
       monitor.stats.skipped += 1;
       ctx.abort();
@@ -66,7 +72,7 @@ export async function processTextMessage(
   }
 
   // 允许用户主动终止对话
-  if (['新对话', '新聊天', '重新开始'].includes(text)) {
+  if (newWords.includes(text)) {
     ctx.session.clear();
 
     if (ctx.isLocked) {
@@ -78,7 +84,9 @@ export async function processTextMessage(
     return reply(codeBlock`
       ⊶ 系统提示
       ﹊
-      好的，让我们重新开始聊天吧！你有什么想和我聊的吗？`);
+      好的，新的对话从现在开始，期待与您的交流。
+
+      如有任何问题或需要帮助，请随时提出.`);
   }
 
   // Note: 可以解决提升多模型切换命令的优先级
