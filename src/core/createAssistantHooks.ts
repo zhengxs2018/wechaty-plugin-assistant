@@ -14,4 +14,5 @@ export const createAssistantHooks = (): AssistantHooks => ({
   onContextDestroyed: createAssistantHookQueue('onContextDestroyed'),
 
   onPrepareTextMessage: createAssistantHookQueue('onPrepareTextMessage'),
+  onPrepareFileMessage: createAssistantHookQueue('onPrepareFileMessage'),
 });

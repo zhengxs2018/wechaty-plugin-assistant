@@ -4,6 +4,7 @@ import { log, type Message } from 'wechaty';
 import { type Assistant } from '../interfaces';
 import { castToError } from '../util';
 import { createConversationContext } from './createConversationContext';
+import { processFileMessage } from './processFileMessage';
 import { processTextMessage } from './processTextMessage';
 import { processUnknownMessage } from './processUnknownMessage';
 
@@ -71,13 +72,10 @@ export async function wechatyMessageHandler(
   try {
     switch (message.type()) {
       case Message.Type.Attachment:
-        assistant.call(ctx);
-        break;
       case Message.Type.Audio:
-        assistant.call(ctx);
-        break;
       case Message.Type.Image:
-        assistant.call(ctx);
+      case Message.Type.Video:
+        await processFileMessage(controller, assistant, ctx);
         break;
       case Message.Type.Text:
         await processTextMessage(controller, assistant, ctx);
