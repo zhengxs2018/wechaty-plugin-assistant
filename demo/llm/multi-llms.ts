@@ -31,19 +31,19 @@ async function main() {
 
   console.log('查看模型\n');
   await assistant.handler(createMockTextMessage('查看模型'));
-  console.log('\n')
+  console.log('\n');
   await assistant.handler(createMockTextMessage('第一次对话'));
 
   console.log('\n---------------\n');
   console.log('切换星火\n');
   await assistant.handler(createMockTextMessage('切换星火'));
-  console.log('\n')
+  console.log('\n');
   await assistant.handler(createMockTextMessage('第二次对话'));
 
   console.log('\n---------------\n');
   console.log('查看模型\n');
   await assistant.handler(createMockTextMessage('查看模型'));
-  console.log('\n')
+  console.log('\n');
   await assistant.handler(createMockTextMessage('第三次对话'));
 }
 
