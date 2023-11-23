@@ -13,12 +13,14 @@ export class MultiChatModelSwitch implements ChatModel {
   input_type: ChatType[] = [];
 
   // TODO 改成数组以支持不同模型的多个实例
-  protected llms: Map<string, ChatModel> = new Map();
+  protected llms: ChatModel[];
+  protected llmMap: Map<string, ChatModel> = new Map();
   protected llm?: ChatModel;
 
   constructor(llms: ChatModel[]) {
     this.llm = llms[0];
-    this.llms = new Map(llms.map(llm => [llm.name, llm]));
+    this.llms = llms;
+    this.llmMap = new Map(llms.map(llm => [llm.name, llm]));
     this.input_type = Array.from(
       new Set(llms.map(llm => llm.input_type).flat()),
     );
@@ -42,7 +44,9 @@ export class MultiChatModelSwitch implements ChatModel {
       模型列表
       ${Array.from(this.llms.values())
         .map(llm => `  - ${llm.human_name}`)
-        .join(`\n`)}`);
+        .join(`\n`)}
+
+      输入 “切换${llm?.human_name || '模型名称'}”，可以切换至其他模型，模型名称支持模糊匹配。`);
     }
 
     if (text.startsWith('切换')) {
@@ -101,24 +105,76 @@ export class MultiChatModelSwitch implements ChatModel {
       暂无可用的 AI 模型！`);
     }
 
-    if (llm.input_type.includes(ctx.type)) {
-      return llm.call(ctx, assistant);
-    }
-
-    ctx.reply(codeBlock`
+    if (llm.input_type.includes(ctx.type) === false) {
+      ctx.reply(codeBlock`
       ⊶ 系统提示
       ﹊
-      ${llm.human_name} 暂不支持处理此类消息！`);
+      ${llm.human_name} 暂不支持处理此类消息！
+
+      请切换至其他模型后再试。`);
+    }
+
+    // 如果当前模型调用失败，尝试其他模型
+    const llms = this.llms.filter(cur => {
+      return cur.input_type.includes(ctx.type) && llm !== cur;
+    });
+
+    return this.calling(ctx, assistant, llm, llms);
+  }
+
+  async calling(
+    ctx: ConversationContext,
+    assistant: Assistant,
+    llm: ChatModel,
+    llms: ChatModel[] = this.llms,
+  ) {
+    try {
+      return await llm.call(ctx, assistant);
+    } catch (error) {
+      console.error(`${llm.human_name} 模型调用失败`, error);
+
+      if (llms.length > 0) {
+        ctx.reply(codeBlock`
+        ⊶ 系统提示
+        ﹊
+        ${llm.human_name} 模型调用失败，将尝试其他模型。`);
+
+        return this.callWithFallback(ctx, assistant, llms);
+      }
+
+      ctx.reply(codeBlock`
+      ⊶ 系统提示
+      ﹊
+      ${llm.human_name} 模型调用失败，可以试试其他模型。
+
+      输入 “查看模型” 可以获取当前支持的模型列表。`);
+    }
+  }
+
+  async callWithFallback(
+    ctx: ConversationContext,
+    assistant: Assistant,
+    llms: ChatModel[] = this.llms,
+  ): Promise<void> {
+    const llm = llms.shift();
+    try {
+      return await llm?.call(ctx, assistant);
+    } catch (error) {
+      if (llms.length > 0) {
+        return await this.callWithFallback(ctx, assistant, llms);
+      }
+      throw error;
+    }
   }
 
   protected resolve(name?: string): ChatModel | undefined {
     if (!name) return this.llm;
-    return this.llms.get(name) || this.llm;
+    return this.llmMap.get(name) || this.llm;
   }
 
   protected find(searchName: string) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    for (const [_, llm] of this.llms) {
+    for (const llm of this.llms) {
       if (
         llm.name.toLowerCase().includes(searchName) ||
         llm.human_name.toLowerCase().includes(searchName)
