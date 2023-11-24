@@ -53,8 +53,9 @@ export class MultiChatModelSwitch implements ChatModel {
       // 中断后续处理
       controller.abort();
 
-      // TODO: 需要停止之前的对话？
-      ctx.abort();
+      // Note: 如果这里阻止，reply 将不会发送任何消息
+      // 需要想办法让 reply 发送消息
+      // ctx.abort();
 
       const searchName = text.split('切换')[1]?.trim();
 
