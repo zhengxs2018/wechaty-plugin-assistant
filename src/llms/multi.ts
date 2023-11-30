@@ -46,7 +46,9 @@ export class MultiChatModelSwitch implements ChatModel {
         .map(llm => `  - ${llm.human_name}`)
         .join(`\n`)}
 
-      输入 “切换${llm?.human_name || '模型名称'}”，可以切换至其他模型，模型名称支持模糊匹配。`);
+      输入 “切换${
+        llm?.human_name || '模型名称'
+      }”，可以切换至其他模型，模型名称支持模糊匹配。`);
     }
 
     if (text.startsWith('切换')) {
@@ -57,7 +59,7 @@ export class MultiChatModelSwitch implements ChatModel {
       // 需要想办法让 reply 发送消息
       // ctx.abort();
 
-      const searchName = text.split('切换')[1]?.trim();
+      const searchName = text.split('切换')[1]?.toLowerCase().trim();
 
       if (!searchName) {
         return ctx.reply(codeBlock`
