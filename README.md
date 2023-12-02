@@ -134,11 +134,15 @@ $ pnpm task ./samples/llm/custom.ts
   - 类型：`Message.Type.Recalled`
   - 回复：提示对方，如有隐私担忧找开发者沟通
 - 新人入群：
-  - 事件：`room-invite`
+  - 事件：`room-join`
   - 动作：发送欢迎消息
 - 邀请入群
   - 事件：`room-invite`
   - 动作：Web 版不支持，发送不支持消息
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=zhengxs2018/wechaty-plugin-assistant&type=Date)](https://star-history.com/#zhengxs2018/wechaty-plugin-assistant&Date)
 
 ## 感谢
 
