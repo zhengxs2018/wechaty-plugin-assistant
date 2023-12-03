@@ -3,10 +3,15 @@ import { type MemoryCache, State } from '../interfaces';
 export async function createUserConfig(
   cache: MemoryCache,
   talkerId: string,
+  talkerName: string,
 ): Promise<State> {
   const key = `user:config:${talkerId}`;
 
-  const state = (await cache.get(key)) || {};
+  const state = ((await cache.get(key)) || {}) as State;
+
+  // 方便管理和查看配置对象
+  state.user_id = talkerId;
+  state.user_name = talkerName;
 
   const restore = async () => {
     await cache.set(key, state);
@@ -31,5 +36,5 @@ export async function createUserConfig(
     },
   });
 
-  return state as State;
+  return state;
 }

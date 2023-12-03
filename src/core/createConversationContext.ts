@@ -34,7 +34,7 @@ export async function createConversationContext(
     await Promise.all([
       room?.topic(),
       message.wechaty.currentUser.name(),
-      createUserConfig(cache, talkerId),
+      createUserConfig(cache, talkerId, talkerName),
       createConversationSession(cache, conversationId),
     ]);
 
