@@ -12,6 +12,7 @@ async function main() {
   console.log('assistant', res0.text);
 
   const res1 = await model.sendMessage('Repeat what I said earlier.', {
+    // @ts-expect-error TODO 类型需要处理
     conversationId: res0.conversationId,
   });
 
