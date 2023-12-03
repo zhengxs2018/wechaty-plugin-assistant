@@ -79,18 +79,6 @@ bot.start();
 | `停止` \\ `停止回复`               | 模拟 Web UI 的，停止生成按钮                                                  |
 | `查看模型` \\ `切换 xxx`           | `MultiChatModelSwitch` 模块添加的功能，允许配置多个模型，由最终使用者自己切换 |
 
-## 模型支持
-
-| 名称        | 描述                                                                              | 模式          | 状态  |
-| ----------- | --------------------------------------------------------------------------------- | ------------- | ----- |
-| 文心一言    | 支持 百度千帆 和 AI Studio 的 API 调用                                            | API           | Alpha |
-| 通义千问    |                                                                                   | -             | N/A   |
-| 讯飞星火    |                                                                                   | -             | N/A   |
-| Claude      | 基于 [Claude](https://claude.ai/chats) Web API，内部已配置 [反向代理服务][apifox] | Reverse Proxy | Alpha |
-| ChatGPT     | 推荐 [代理][openai-proxy]                                                         | API           | Alpha |
-| Google Bard |                                                                                   | -             | N/A   |
-| More...     |                                                                                   | -             | N/A   |
-
 ## 内置指令
 
 | 名称     | 描述                                                                                                                          | 状态  |
@@ -100,6 +88,21 @@ bot.start();
 | `/hot`   | 热搜榜，感谢 [韩小韩][han-api] 提供的 API                                                                                     | Alpha |
 | `/kfc`   | 疯狂星期四文案，感谢 [Brick][brick-api] 提供的 API                                                                            | Alpha |
 | `/moyu`  | 摸鱼日历，感谢 [韩小韩][brick-api] 提供的 API 以及 摸鱼日历 提供的图片                                                        | Alpha |
+
+## 模型支持
+
+| 名称                                     | 公司      | 描述                                                                              | 代码         | 状态  |
+| ---------------------------------------- | --------- | --------------------------------------------------------------------------------- | ------------ | ----- |
+| 文心一言                                 | 百度      | 支持 [百度千帆][bce-yiyan] 和 [AI Studio][as-yiyan] 的 API 调用                   | ChatERNIEBot | Alpha |
+| [通义千问][ali-qwen]                     | 阿里      | 支持 `qwen-turbo \| qwen-plus \| qwen-max \| baichuan2-7b-chat-v1` 模型           | ChatQWen     | Alpha |
+| [混元助手](https://hunyuan.tencent.com/) | 腾讯      |                                                                                   | ChatHunYuan  | Alpha |
+| [星火认知][spark-api]                    | 讯飞      | 支持 `1.5 \| 2 \| 3` 模型                                                         | ChatSpark    | Alpha |
+| [MM智能助理][mm-api]                     | 稀宇科技  | 支持 `abab5-chat \| abab5.5-chat \| abab5.5-chat-pro` 模型                        | ChatMinimax  | Alpha |
+| Claude                                   | Anthropic | 基于 [Claude](https://claude.ai/chats) Web API，内部已配置 [反向代理服务][apifox] | ChatClaudeAI | Alpha |
+| ChatGPT                                  | OpenAI    | 推荐 [代理][openai-proxy]                                                         | ChatOpenAI   | Alpha |
+| Bard                                     | Google    |                                                                                   | -            | N/A   |
+
+目前仅支持官方 API 调用。
 
 ## 本地开发
 
@@ -134,11 +137,20 @@ $ pnpm task ./samples/llm/custom.ts
   - 类型：`Message.Type.Recalled`
   - 回复：提示对方，如有隐私担忧找开发者沟通
 - 新人入群：
-  - 事件：`room-invite`
+  - 事件：`room-join`
   - 动作：发送欢迎消息
 - 邀请入群
   - 事件：`room-invite`
   - 动作：Web 版不支持，发送不支持消息
+
+## 关联项目
+
+- [@zhengxs/ai](https://github.com/zhengxs2018/ai) - 各平台大模型 API 统一封装
+- [@zhengxs/erniebot](https://github.com/zhengxs2018/erniebot-sdk-for-js)
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=zhengxs2018/wechaty-plugin-assistant&type=Date)](https://star-history.com/#zhengxs2018/wechaty-plugin-assistant&Date)
 
 ## 感谢
 
@@ -163,3 +175,8 @@ MIT
 [pear-api]: https://api.pearktrue.cn/
 [han-api]: https://api.vvhan.com/
 [brick-api]: https://api.001500.cn/
+[as-yiyan]: https://aistudio.baidu.com/cooperate/yiyan
+[bce-yiyan]: https://cloud.baidu.com/doc/WENXINWORKSHOP/index.html
+[ali-qwen]: https://help.aliyun.com/zh/dashscope/developer-reference/tongyi-thousand-questions/
+[spark-api]: https://xinghuo.xfyun.cn/sparkapi
+[mm-api]: https://api.minimax.chat/
