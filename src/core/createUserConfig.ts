@@ -10,7 +10,6 @@ export async function createUserConfig(
   const state = ((await cache.get(key)) || {}) as State;
 
   // 方便管理和查看配置对象
-  state.user_id = talkerId;
   state.user_name = talkerName;
 
   const restore = async () => {
@@ -18,6 +17,10 @@ export async function createUserConfig(
   };
 
   const clear = async () => {
+    // hack 避免被 restore 重新存储回去
+    for (const key in state) {
+      delete state[key];
+    }
     await cache.delete(key);
   };
 

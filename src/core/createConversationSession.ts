@@ -6,13 +6,17 @@ export async function createConversationSession(
 ): Promise<State> {
   const key = `assistant:session:${conversationId}`;
 
-  const state = (await cache.get(key)) || {};
+  const state = ((await cache.get(key)) || {}) as State;
 
   const restore = async () => {
     await cache.set(key, state);
   };
 
   const clear = async () => {
+    // hack 避免被 restore 重新存储回去
+    for (const key in state) {
+      delete state[key];
+    }
     await cache.delete(key);
   };
 
@@ -31,5 +35,5 @@ export async function createConversationSession(
     },
   });
 
-  return state as State;
+  return state;
 }
