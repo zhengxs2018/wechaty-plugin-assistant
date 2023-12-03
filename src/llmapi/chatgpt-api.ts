@@ -1,4 +1,4 @@
-import { OpenAI, type ClientOptions } from 'openai';
+import { type ClientOptions, OpenAI } from 'openai';
 
 import {
   ChatLLMAPI,

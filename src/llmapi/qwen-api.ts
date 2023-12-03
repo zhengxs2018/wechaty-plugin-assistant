@@ -10,8 +10,7 @@ import {
 export type QWenChatParams =
   Partial<QWenAI.ChatCompletionCreateParamsNonStreaming>;
 
-export type QWenAPIOptions = QWenAIOptions &
-  ChatLLMAPIOptions<QWenChatParams>;
+export type QWenAPIOptions = QWenAIOptions & ChatLLMAPIOptions<QWenChatParams>;
 
 export class QWenAPI extends ChatLLMAPI<QWenChatParams> {
   protected api: QWenAI;

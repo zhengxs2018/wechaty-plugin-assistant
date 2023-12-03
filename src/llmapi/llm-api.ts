@@ -117,7 +117,7 @@ export abstract class ChatLLMAPI<ChatParams = Record<string, any>> {
       parentMessageId,
       messageId,
       ...rest,
-    })
+    });
 
     return responseP.then(async () => {
       if (answer.needClearHistory || answer.error) {
