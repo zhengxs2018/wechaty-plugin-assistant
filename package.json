@@ -1,6 +1,6 @@
 {
   "name": "@zhengxs/wechaty-plugin-assistant",
-  "version": "0.1.0-alpha.23",
+  "version": "0.1.0-alpha.24",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "description": "基于 wechaty 的聊天助手插件",
@@ -54,6 +54,7 @@
     "wechaty": ">=1"
   },
   "dependencies": {
+    "@zhengxs/ai": "0.1.0-alpha.6",
     "@zhengxs/erniebot": "0.1.0-alpha.5",
     "common-tags": "^1.8.2",
     "eventemitter3": "^5.0.1",
@@ -62,7 +63,8 @@
     "js-tiktoken": "^1.0.8",
     "keyv": "^4.5.4",
     "languagedetect": "^2.0.0",
-    "minimist": "^1.2.8"
+    "minimist": "^1.2.8",
+    "openai": "^4.20.1"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.38.3",

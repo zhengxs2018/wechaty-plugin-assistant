@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 
 import { type EBOptions, ERNIEBot } from '@zhengxs/erniebot';
+import { getEncoding } from 'js-tiktoken';
 import Keyv from 'keyv';
 
 import { QuickLRU } from '../vendors';
@@ -8,8 +9,9 @@ import {
   type ChatMessage,
   type GetMessageByIdFunction,
   type UpsertMessageFunction,
-} from './chatgpt-api';
-import * as tokenizer from './chatgpt-api/tokenizer';
+} from './llm-api';
+
+const tokenizer = getEncoding('cl100k_base');
 
 const CHATGPT_MODEL = 'ernie-bot';
 
@@ -109,6 +111,8 @@ export class ERNIEBotAPI {
       conversationId,
       parentMessageId,
       text,
+      type: 'text',
+      files: [],
     };
 
     const { messages } = await this._buildMessages(text, opts);
@@ -132,6 +136,8 @@ export class ERNIEBotAPI {
       conversationId,
       parentMessageId: messageId,
       text: response.result,
+      type: 'text',
+      files: [],
     };
 
     return Promise.all([

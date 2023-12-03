@@ -21,6 +21,7 @@ words:
   - erniebot
   - GPTAPI
   - hotlist
+  - hunyuan
   - jiti
   - keyv
   - langchain
@@ -32,6 +33,7 @@ words:
   - openai
   - preinstall
   - qianfan
+  - qwen
   - tiktoken
   - trivago
   - vuepress

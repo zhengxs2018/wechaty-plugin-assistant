@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 
-import { type ChatMessage } from './chatgpt-api';
+import { type ChatMessage } from './llm-api';
 
 const CLAUDE_MODEL = 'claude-2';
 
@@ -83,6 +83,8 @@ export class ClaudeAI {
       conversationId,
       parentMessageId,
       text,
+      type: 'text',
+      files: [],
     };
 
     const answer = await this.request('/append_message', {
@@ -106,6 +108,8 @@ export class ClaudeAI {
       conversationId,
       parentMessageId: userMessage.id,
       text: answer,
+      type: 'text',
+      files: [],
     };
 
     return result;
