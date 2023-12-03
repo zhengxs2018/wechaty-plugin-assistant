@@ -26,13 +26,13 @@ export class ChatOpenAI implements ChatModel {
       concurrency = 3,
       interval = 1000,
       // See https://github.com/UNICKCHENG/openai-proxy
-      apiBaseUrl = 'https://openai.aihey.cc/openai/v1',
+      baseURL = 'https://openai.aihey.cc/openai/v1',
       ...rest
     } = options;
 
     this.api = new ChatGPTAPI({
       ...rest,
-      apiBaseUrl,
+      baseURL,
     });
 
     this.limiter = new PQueue({
