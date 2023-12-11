@@ -194,6 +194,9 @@ $ pnpm task ./samples/llm/custom.ts
 
 MIT
 
+## 访问量： 
+![](https://profile-counter.glitch.me/github-zhengxs2018-wechaty-plugin-assistant/count.svg)
+
 [apifox]: https://openai-proxy.apifox.cn/
 [openai-proxy]: https://www.openai-proxy.com/
 [bob-plugin-deepl]: https://github.com/akl7777777/bob-plugin-akl-deepl-free-translate
