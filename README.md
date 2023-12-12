@@ -13,18 +13,6 @@
 - 支持自定义大模型接入
 - 对二次开发友好
 
-## 文档
-
-**教程**
-
-- [一、概念](./docs/concepts.md)
-- [二、消息流程处理](./docs/process.md)
-- [三、自定义开发](./docs/tutorials.md)
-
-**文章**
-
-- [构建一个属于你自己的 AI 对话机器人](./docs/blog/build-your-ai-assistant.md.md)
-
 ## 快速开始
 
 ### 安装
@@ -76,6 +64,23 @@ bot.use(assistant.callback());
 
 bot.start();
 ```
+
+## 文档
+
+**教程**
+
+- [一、概念](./docs/concepts.md)
+- [二、消息流程处理](./docs/process.md)
+- [三、自定义开发](./docs/tutorials.md)
+
+**文章**
+
+- [构建一个属于你自己的 AI 对话机器人](./docs/blog/build-your-ai-assistant.md.md)
+
+## 关联项目
+
+- [@zhengxs/ai](https://github.com/zhengxs2018/ai) - 各平台大模型 API 统一封装
+- [@zhengxs/erniebot](https://github.com/zhengxs2018/erniebot-sdk-for-js)
 
 ## 口令支持
 
@@ -167,11 +172,6 @@ $ pnpm task ./samples/llm/custom.ts
 - [ ] 邀请入群
   - 事件：`room-invite`
   - 动作：Web 版不支持，发送不支持消息
-
-## 关联项目
-
-- [@zhengxs/ai](https://github.com/zhengxs2018/ai) - 各平台大模型 API 统一封装
-- [@zhengxs/erniebot](https://github.com/zhengxs2018/erniebot-sdk-for-js)
 
 ## Star History
 
