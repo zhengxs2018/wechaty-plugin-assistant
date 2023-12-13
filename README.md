@@ -140,6 +140,12 @@ const assistant = createAssistant({
 | `/kfc`   | 疯狂星期四文案，感谢 [Brick][brick-api] 提供的 API                                                                            | Alpha |
 | `/moyu`  | 摸鱼日历，感谢 [韩小韩][brick-api] 提供的 API 以及 摸鱼日历 提供的图片                                                        | Alpha |
 
+<div align="right">
+
+[![][back-to-top]](#readme-top)
+
+</div>
+
 ## 🪢 AI 模型
 
 目前仅支持官方 API 调用，暂不提供 Web API 的代理。
@@ -224,12 +230,24 @@ Contributions of all types are more than welcome, if you are interested in contr
 
 [![Star History Chart](https://api.star-history.com/svg?repos=zhengxs2018/wechaty-plugin-assistant&type=Date)](https://star-history.com/#zhengxs2018/wechaty-plugin-assistant&Date)
 
+<div align="right">
+
+[![][back-to-top]](#readme-top)
+
+</div>
+
 ---
 
 #### 📝 License
 
 Copyright © 2023 [zhengxs2018][profile-link]. <br />
 This project is [MIT](./LICENSE) licensed.
+
+<div align="right">
+
+[![][back-to-top]](#readme-top)
+
+</div>
 
 [profile-link]: https://github.com/zhengxs2018
 [apifox]: https://openai-proxy.apifox.cn/
