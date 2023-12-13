@@ -20,15 +20,32 @@
 
 </div>
 
+<details>
+<summary><kbd>目录树</kbd></summary>
+
+#### TOC
+
+- [✨ 功能特性](#-功能特性)
+- [📖 使用文档](#-使用文档)
+- [📦 安装](#-安装)
+- [🧰 内置功能](#-内置功能)
+- [🪢 AI 模型](#-ai-模型)
+- [🔗 更多工具](#-更多工具)
+- [🤝 参与贡献](#-参与贡献)
+
+<br/>
+
+</details>
+
 ## ✨ 功能特性
 
 - 🚀 **快速开始**: 只需简单三步，即可轻松启动智能对话机器人。
-- 💎 **关注点分离**: 通过抽象 **助手**、**上下文** 和 **大模型** 的概念，更方便地理解和应用，以应对复杂的对话场景。
-- 🗣️ **对话处理**: 专注于处理用户私聊和群内被提及的消息，避免大模型被大量消息阻塞。
-- ⌛ **消息等待**: 如果 AI 尚未回应，自动拒绝新消息的处理，确保对话流畅。
+- 💡 **关注点分离**: 通过抽象 **助手**、**上下文** 和 **大模型** 的概念，更方便地理解和应用，以应对复杂的对话场景。
+- 💬 **用户对话**: 专注于处理用户私聊和群内被提及的消息，避免大模型被大量消息阻塞。
+- ⏳ **处理等待**: 如果 AI 尚未回应，自动拒绝新消息的处理，确保对话流畅。
 - 🪡 **自由定制**: 考虑到二次开发的需求，可以方便地拓展助手功能，满足个性化需求。
 
-## 📖 文档
+## 📖 使用文档
 
 **教程**
 
@@ -40,12 +57,18 @@
 
 - [构建一个属于你自己的 AI 对话机器人](./docs/blog/build-your-ai-assistant.md.md)
 
+<div align="right">
+
+[![][back-to-top]](#readme-top)
+
+</div>
+
 ## 📦 安装
 
-To install `@zhengxs/wechaty-plugin-assistant/`, run the following command:
+要安装 `@zhengxs/wechaty-plugin-assistant`，请运行以下命令:
 
 ```bash
-$ pnpm install @zhengxs/wechaty-plugin-assistant/
+$ pnpm install @zhengxs/wechaty-plugin-assistant
 ```
 
 <div align="right">
@@ -94,7 +117,7 @@ bot.start();
 同时接入多个大模型。
 
 ```ts
-import { ChatERNIEBot, ChatQWen, MultiChatModelSwitch, createAssistant } from '@zhengxs/wechaty-plugin-assistant';
+import { ChatERNIEBot, ChatQWen, createAssistant, MultiChatModelSwitch } from '@zhengxs/wechaty-plugin-assistant';
 
 const assistant = createAssistant({
   llm: new MultiChatModelSwitch([
@@ -161,13 +184,13 @@ const assistant = createAssistant({
 
 </div>
 
-## ⌨️ Local Development
+## ⌨️ 本地开发
 
-You can use Github Codespaces for online development:
+可以使用 GitHub Codespaces 进行在线开发：
 
 [![][github-codespace-shield]][github-codespace-link]
 
-Or clone it for local development:
+或者使用以下命令进行本地开发：
 
 ```bash
 $ git clone https://github.com/zhengxs2018/wechaty-plugin-assistant.git
@@ -182,23 +205,9 @@ $ pnpm dev
 
 </div>
 
-## 🔗 Links
-
-### More Products
+## 🔗 更多工具
 
 - **[🤖 @zhengxs/ai](https://github.com/zhengxs2018/ai)** - 集成 百度文心一言，阿里通义千问，腾讯混元助手 和 讯飞星火认知 等国内大模型的 API，并且适配 OpenAI 的输入与输出。
-
-### Thanks
-
-- [chatgpt-api](https://github.com/transitive-bullshit/chatgpt-api)
-- [commander](https://github.com/tj/commander.js)
-- [wechaty](https://github.com/wechaty/wechaty)
-- [koa.js](https://github.com/koajs/koa)
-- [koa-session](https://github.com/koajs/session)
-- [openai-proxy](https://github.com/UNICKCHENG/openai-proxy)
-- And more
-
-以上排名不分先后.
 
 <div align="right">
 
@@ -206,9 +215,9 @@ $ pnpm dev
 
 </div>
 
-## 🤝 Contributing
+## 🤝 参与贡献
 
-Contributions of all types are more than welcome, if you are interested in contributing code, feel free to check out our GitHub [Issues][github-issues-link] to get stuck in to show us what you’re made of.
+我们非常欢迎各种形式的贡献。如果你对贡献代码感兴趣，可以查看我们的 GitHub [Issues][github-issues-link] 大展身手，向我们展示你的奇思妙想。
 
 [![][pr-welcome-shield]][pr-welcome-link]
 
