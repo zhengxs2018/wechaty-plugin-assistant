@@ -37,7 +37,6 @@ export class QWenAPI extends ChatLLMAPI<QWenChatParams> {
       chatParams: {
         model: 'qwen-max',
         temperature: 0.8,
-        top_p: 1.0,
         ...chatParams,
       },
       maxModelTokens,
