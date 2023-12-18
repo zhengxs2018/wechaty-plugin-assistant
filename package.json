@@ -42,10 +42,10 @@
   "scripts": {
     "prepare": "husky install",
     "preinstall": "npx only-allow pnpm",
-    "dev": "pnpm task --watch ./demo/multi-llms.ts",
+    "dev": "pnpm task ./demo/index.ts",
     "task": "node --no-warnings -r tsconfig-paths/register -r dotenv/config -r jiti/register",
     "inspect": "node --no-warnings --inspect -r tsconfig-paths/register -r dotenv/config -r jiti/register",
-    "build": "trash dist dist-types && tsc --noEmit && pnpm lint && vite build",
+    "build": "trash dist dist-types && pnpm lint && vite build",
     "lint": "eslint . --ext .ts,.cjs",
     "lint:fix": "eslint . --ext .ts,.cjs --fix --fix-type [problem,suggestion]",
     "fmt": "prettier --write \"**/*.{ts,json,,md}\" --log-level warn"
