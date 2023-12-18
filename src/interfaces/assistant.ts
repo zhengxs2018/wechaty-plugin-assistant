@@ -1,11 +1,13 @@
 import {
   type ContactSelf,
-  Message,
+  type Message,
   type Wechaty,
   type WechatyPlugin,
 } from 'wechaty';
 
-import { Command } from '../integrations';
+import { type Command } from '../integrations';
+import { type ChatModel } from './llm';
+import { type Keywords } from './keywords';
 import { type ConversationContext } from './context';
 import { type HookQueue, type HooksName } from './hooks';
 import { type AssistantMonitor } from './monitor';
@@ -32,9 +34,16 @@ export interface Assistant {
   command: Command;
 
   /**
+   * 关键词
+   */
+  keywords: Keywords;
+
+  /**
    * 助手的钩子
    */
   hooks: AssistantHooks;
+
+  llm: ChatModel
 
   /**
    * 当前机器人登录的用户

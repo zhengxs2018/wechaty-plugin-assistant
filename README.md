@@ -86,7 +86,10 @@ $ pnpm install @zhengxs/wechaty-plugin-assistant
 在这里获取你的 [accessToken](https://aistudio.baidu.com/index/accessToken) 值。
 
 ```ts
-import { ChatERNIEBot, createAssistant } from '@zhengxs/wechaty-plugin-assistant';
+import {
+  ChatERNIEBot,
+  createAssistant,
+} from '@zhengxs/wechaty-plugin-assistant';
 import { WechatyBuilder } from 'wechaty';
 import { QRCodeTerminal } from 'wechaty-plugin-contrib';
 
@@ -121,7 +124,12 @@ bot.start();
 同时接入多个大模型。
 
 ```ts
-import { ChatERNIEBot, ChatQWen, createAssistant, MultiChatModelSwitch } from '@zhengxs/wechaty-plugin-assistant';
+import {
+  ChatERNIEBot,
+  ChatQWen,
+  createAssistant,
+  MultiChatModelSwitch,
+} from '@zhengxs/wechaty-plugin-assistant';
 
 const assistant = createAssistant({
   llm: new MultiChatModelSwitch([
@@ -151,7 +159,7 @@ const assistant = createAssistant({
 ### 指令
 
 > [!NOTE]
-> 后续将去除内置指令，改为按需手动注册。
+> 不再内置指令，改为按需手动注册。
 
 | 名称     | 描述                                                                                                                          | 状态  |
 | -------- | ----------------------------------------------------------------------------------------------------------------------------- | ----- |

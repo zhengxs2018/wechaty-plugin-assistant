@@ -11,9 +11,8 @@ export class MultiChatModelSwitch implements ChatModel {
   name: string = 'multi-model';
   human_name: string = '多模型管理';
   input_type: ChatType[] = [];
+  llms: ChatModel[];
 
-  // TODO 改成数组以支持不同模型的多个实例
-  protected llms: ChatModel[];
   protected llmMap: Map<string, ChatModel> = new Map();
   protected llm?: ChatModel;
 
@@ -46,9 +45,8 @@ export class MultiChatModelSwitch implements ChatModel {
         .map(llm => `  - ${llm.human_name}`)
         .join(`\n`)}
 
-      输入 “切换${
-        llm?.human_name || '模型名称'
-      }”，可以切换至其他模型，模型名称支持模糊匹配。`);
+      -------------------
+      输入 "帮助" 获取更详细的使用说明。`);
     }
 
     if (text.startsWith('切换')) {
@@ -70,13 +68,19 @@ export class MultiChatModelSwitch implements ChatModel {
             .map(llm => `  - ${llm.human_name}`)
             .join(`\n`)}
 
-          提示：必须带 “切换” 关键字，但模型名称支持模糊匹配。`);
+          -------------------
+          输入 "帮助" 获取更详细的使用说明。`);
       }
 
       const found = this.find(searchName.toString());
 
       if (found) {
         userConfig.model = found.name;
+
+        // 输出招呼语
+        if (found.greeting) {
+          return ctx.reply(found.greeting);
+        }
 
         return ctx.reply(codeBlock`
         ⊶ 系统提示
@@ -94,7 +98,8 @@ export class MultiChatModelSwitch implements ChatModel {
         .map(llm => `  - ${llm.human_name}`)
         .join(`\n`)}
 
-      提示：必须带 “切换” 关键字，但模型名称支持模糊匹配。`);
+      -------------------
+      输入 "帮助" 获取更详细的使用说明。`);
     }
   }
 
@@ -105,7 +110,9 @@ export class MultiChatModelSwitch implements ChatModel {
       return ctx.reply(codeBlock`
       ⊶ 系统提示
       ﹊
-      暂无可用的 AI 模型！`);
+      暂无可用的 AI 模型！
+      -------------------
+      输入 "帮助" 获取更详细的使用说明。`);
     }
 
     if (llm.input_type.includes(ctx.type) === false) {
@@ -114,7 +121,9 @@ export class MultiChatModelSwitch implements ChatModel {
       ﹊
       ${llm.human_name} 暂不支持处理此类消息！
 
-      请切换至其他模型后再试。`);
+      请切换至其他模型后再试。
+      -------------------
+      输入 "帮助" 获取更详细的使用说明。`);
     }
 
     // 如果当前模型调用失败，尝试其他模型
@@ -149,8 +158,8 @@ export class MultiChatModelSwitch implements ChatModel {
       ⊶ 系统提示
       ﹊
       ${llm.human_name} 模型调用失败，可以试试其他模型。
-
-      输入 “查看模型” 可以获取当前支持的模型列表。`);
+      -------------------
+      输入 "帮助" 获取更详细的使用说明。`);
     }
   }
 

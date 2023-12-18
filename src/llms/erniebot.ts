@@ -14,25 +14,17 @@ export interface ChatERNIEBotOptions extends EBApiOptions {
 }
 
 export class ChatERNIEBot implements ChatModel {
-  name: string;
-  human_name: string;
+  name: string ='ernie-bot'
+  human_name: string = '文心一言';
   input_type = [ChatType.Text];
 
   protected api: ERNIEBotAPI;
   protected limiter: PQueue;
 
   constructor(options: ChatERNIEBotOptions) {
-    const { token, concurrency = 3, interval = 1000, ...rest } = options;
+    const { concurrency = 3, interval = 1000, ...rest } = options;
 
-    if (token) {
-      this.name = 'qianfan';
-      this.human_name = '文心千帆';
-    } else {
-      this.name = 'aistudio';
-      this.human_name = '文心飞浆';
-    }
-
-    this.api = new ERNIEBotAPI({ token, ...rest });
+    this.api = new ERNIEBotAPI(rest);
 
     this.limiter = new PQueue({
       concurrency,

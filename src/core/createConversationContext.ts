@@ -27,6 +27,7 @@ export async function createConversationContext(
 
   const {
     monitor,
+    llm,
     options: { debug, maintainers, cache },
   } = assistant;
 
@@ -127,6 +128,8 @@ export async function createConversationContext(
   }
 
   const ctx: ConversationContext = {
+    assistant,
+    llm: llm,
     conversationId,
     conversationTitle,
     talkerId,

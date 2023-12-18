@@ -1,7 +1,7 @@
 import { codeBlock } from 'common-tags';
 
-import commands from '../commands';
 import { Command } from '../integrations/commander';
+import { deepl } from '../commands'
 import { type Assistant, type AssistantConfig } from '../interfaces';
 import { createAssistantHooks } from './createAssistantHooks';
 import { createAssistantMonitor } from './createAssistantMonitor';
@@ -9,6 +9,8 @@ import { resolveAssistantOptions } from './resolveAssistantOptions';
 import { setupConfigAndLLM } from './setupConfigAndLLM';
 import { wechatyMessageHandler } from './wechatyMessageHandler';
 import { wechatyPluginCallback } from './wechatyPluginCallback';
+
+import { keywords } from './keywords'
 
 export function createAssistant(config: AssistantConfig) {
   const options = resolveAssistantOptions(config);
@@ -27,6 +29,8 @@ export function createAssistant(config: AssistantConfig) {
     chatbotUser: null,
     wechaty: null,
     command: program,
+    keywords,
+    llm,
     handler: message => wechatyMessageHandler(assistant, message),
     callback: () => {
       return bot => void wechatyPluginCallback(assistant, bot);
@@ -38,7 +42,9 @@ export function createAssistant(config: AssistantConfig) {
         ctx.reply(codeBlock`
         ⊶ 系统提示
         ﹊
-        ${llm.human_name} 暂不支持处理此类消息！`);
+        ${llm.human_name} 暂不支持处理此类消息！
+        -------------------
+        输入 "帮助" 获取更详细的使用说明。`);
       }
     },
     run() {
@@ -50,11 +56,7 @@ export function createAssistant(config: AssistantConfig) {
     },
   };
 
-  program.addCommand(commands.deepl);
-  program.addCommand(commands.dict);
-  program.addCommand(commands.hot);
-  program.addCommand(commands.moyu);
-  program.addCommand(commands.kfc);
+  program.addCommand(deepl)
 
   setupConfigAndLLM(options, assistant);
 

@@ -1,8 +1,10 @@
 import { type FileBoxInterface } from 'file-box';
 import { type Message, type Sayable } from 'wechaty';
 
+import { type Assistant } from './assistant';
 import { type State } from './cache';
 import { type LockInfo } from './lock';
+import { type ChatModel } from './llm';
 
 /**
  * 输入类型
@@ -17,6 +19,16 @@ export enum ChatType {
 }
 
 export type ConversationContext = {
+  /**
+   * 助手
+   */
+  assistant: Assistant;
+
+  /**
+   * 大模型
+   */
+  llm: ChatModel;
+
   /**
    * 对话ID
    */

@@ -1,3 +1,4 @@
+import { codeBlock } from 'common-tags';
 import {
   ChatType,
   createAssistant,
@@ -19,6 +20,12 @@ const assistant = createAssistant({
       name: 'xinghuo',
       human_name: '讯飞星火',
       input_type: [ChatType.Text],
+      greeting: codeBlock`
+      您好，我是讯飞星火认知大模型!
+
+      能够学习和理解人类的语言，进行多轮对话。
+
+      回答问题，高效便捷地帮助人们获取信息、知识和灵感。`,
       call(ctx) {
         console.log('[讯飞星火] 收到', ctx.message.text());
       },
