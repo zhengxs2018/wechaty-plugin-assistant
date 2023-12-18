@@ -20,30 +20,28 @@ export async function processTextMessage(
   assistant: Assistant,
   ctx: ConversationContext,
 ) {
-  const { message, reply } = ctx;
-
-  // 拒绝空内容
-  let text = message.text().trim();
-  if (!text) {
-    controller.abort();
-
-    return reply(codeBlock`
-      ⊶ 系统提示
-      ﹊
-      👀 你想要说什么？`);
-  }
+  const { message } = ctx;
 
   const { monitor, keywords } = assistant;
 
   // Note: 需要先清理，否则命令无法匹配
   // 如果是群聊，清除自身的 @ 信息
   if (ctx.conversationTitle) {
-    message.payload!.text = text = text
+    message.payload!.text = message.text()
       // 清理 @机器人 的信息
       .replaceAll(`@${ctx.chatbotUserName}`, '')
       // 去除 @ 符合，但保留 @ 后的内容
       .replaceAll(/@(\S*)/gmu, '$1')
       .trim();
+  }
+
+  // 拒绝空内容
+  const text = message.text();
+  if (!text) {
+    return ctx.reply(codeBlock`
+    ⊶ 系统提示
+    ﹊
+    👀 你想要说什么？`);
   }
 
   // Note: 如果以斜线开头当作指令处理
@@ -53,19 +51,29 @@ export async function processTextMessage(
     return assistant.command.parse(ctx, text.split(' '))
   }
 
-  // 处理帮助命令
+  // 显示帮助
   if (keywords.help.includes(text)) {
-    controller.abort();
     return assistant.options.help(ctx)
   }
 
+  // 显示源码
+  if (keywords.sourceCode.includes(text)) {
+    return ctx.reply(codeBlock`
+    项目地址：
+
+    https://github.com/zhengxs2018/wechaty-plugin-assistant
+
+    欢迎 Star 和 Fork。`);
+  }
+
+  // 重新开始
   if (keywords.stopConversation.includes(text)) {
     if (ctx.isLocked) {
       monitor.stats.skipped += 1;
       ctx.abort();
     }
 
-    return reply(codeBlock`
+    return ctx.reply(codeBlock`
       ⊶ 系统提示
       ﹊
       好的，我将不再回复。如果你有其他问题或需要帮助，请随时告诉我，我将竭诚为您服务。`);
@@ -73,6 +81,7 @@ export async function processTextMessage(
 
   // 允许用户主动终止对话
   if (keywords.newConversation.includes(text)) {
+    // 强制清理上下文
     ctx.session.clear();
 
     if (ctx.isLocked) {
@@ -81,12 +90,12 @@ export async function processTextMessage(
       monitor.stats.skipped += 1;
     }
 
-    return reply(codeBlock`
-      ⊶ 系统提示
-      ﹊
-      好的，新的对话从现在开始，期待与您的交流。
+    return ctx.reply(codeBlock`
+    ⊶ 系统提示
+    ﹊
+    好的，新的对话从现在开始，期待与您的交流。
 
-      如有任何问题或需要帮助，请随时提出.`);
+    如有任何问题或需要帮助，请随时提出.`);
   }
 
   // Note: 可以解决提升多模型切换命令的优先级
@@ -100,7 +109,7 @@ export async function processTextMessage(
 
   // 防止重复提问
   if (ctx.isLocked) {
-    return reply(codeBlock`
+    return ctx.reply(codeBlock`
     ⊶ 系统提示
     ﹊
     稍等一下，还在思考中...`);
