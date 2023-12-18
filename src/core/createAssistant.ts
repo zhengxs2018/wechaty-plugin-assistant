@@ -37,7 +37,9 @@ export function createAssistant(config: AssistantConfig) {
         ctx.reply(codeBlock`
         ⊶ 系统提示
         ﹊
-        ${llm.human_name} 暂不支持处理此类消息！`);
+        ${llm.human_name} 暂不支持处理此类消息！
+        -------------------
+        输入 "帮助" 获取更详细的使用说明。`);
       }
     },
     run() {

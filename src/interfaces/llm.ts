@@ -23,6 +23,16 @@ export interface ChatModel extends PluginObject {
   input_type: ChatType[];
 
   /**
+   * 简单描述
+   */
+  summary?: string;
+
+  /**
+   * 招呼语
+   */
+  greeting?: string;
+
+  /**
    * @param context -
    * @param assistant-
    */
