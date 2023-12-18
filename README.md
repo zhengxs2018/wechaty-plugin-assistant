@@ -20,6 +20,10 @@
 
 </div>
 
+> [!WARNING]
+> 发现使用 `Node 20`，在服务器启动会报一堆的 `AssertError` 错误，使用 `Node 18` 较为稳定。
+> `AssertError` 错误后，可能出现 **自动重试**，导致可能的 **重复消息** 或 **自动退出**，原因未知
+
 <details>
 <summary><kbd>目录树</kbd></summary>
 
