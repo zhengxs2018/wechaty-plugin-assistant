@@ -4,7 +4,7 @@ import hot from './hot';
 import kfc from './kfc';
 import moyu from './moyu';
 
-export default {
+export {
   moyu,
   hot,
   dict,

@@ -1,6 +1,5 @@
 import { codeBlock } from 'common-tags';
 
-import commands from '../commands';
 import { Command } from '../integrations/commander';
 import { type Assistant, type AssistantConfig } from '../interfaces';
 import { createAssistantHooks } from './createAssistantHooks';
@@ -49,12 +48,6 @@ export function createAssistant(config: AssistantConfig) {
       monitor.running = false;
     },
   };
-
-  program.addCommand(commands.deepl);
-  program.addCommand(commands.dict);
-  program.addCommand(commands.hot);
-  program.addCommand(commands.moyu);
-  program.addCommand(commands.kfc);
 
   setupConfigAndLLM(options, assistant);
 
