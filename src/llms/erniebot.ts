@@ -22,17 +22,20 @@ export class ChatERNIEBot implements ChatModel {
   protected limiter: PQueue;
 
   constructor(options: ChatERNIEBotOptions) {
-    const { token, concurrency = 3, interval = 1000, ...rest } = options;
+    const { concurrency = 3, interval = 1000, ...rest } = options;
 
-    if (token) {
-      this.name = 'qianfan';
-      this.human_name = '文心千帆';
-    } else {
+    if (options.token) {
       this.name = 'aistudio';
       this.human_name = '文心飞浆';
+    } else {
+      this.name = 'qianfan';
+      this.human_name = '文心千帆';
     }
 
-    this.api = new ERNIEBotAPI({ token, ...rest });
+    this.api = new ERNIEBotAPI({
+      ...rest,
+      apiType: this.name,
+    });
 
     this.limiter = new PQueue({
       concurrency,
