@@ -42,11 +42,9 @@ export class MultiChatModelSwitch implements ChatModel {
 
       模型列表
       ${Array.from(this.llms.values())
-          .map(llm => `  - ${llm.human_name}`)
-          .join(`\n`)}
+        .map(llm => `  - ${llm.human_name}`)
+        .join(`\n`)}
 
-      输入 “切换${llm?.human_name || '模型名称'
-        }”，可以切换至其他模型，模型名称支持模糊匹配。
       -------------------
       输入 "帮助" 获取更详细的使用说明。`);
     }
@@ -70,7 +68,6 @@ export class MultiChatModelSwitch implements ChatModel {
             .map(llm => `  - ${llm.human_name}`)
             .join(`\n`)}
 
-          提示：必须带 “切换” 关键字，但模型名称支持模糊匹配。
           -------------------
           输入 "帮助" 获取更详细的使用说明。`);
       }
@@ -79,7 +76,6 @@ export class MultiChatModelSwitch implements ChatModel {
 
       if (found) {
         userConfig.model = found.name;
-
 
         // 输出招呼语
         if (found.greeting) {
@@ -99,10 +95,9 @@ export class MultiChatModelSwitch implements ChatModel {
 
       模型列表
       ${Array.from(this.llms.values())
-          .map(llm => `  - ${llm.human_name}`)
-          .join(`\n`)}
+        .map(llm => `  - ${llm.human_name}`)
+        .join(`\n`)}
 
-      提示：必须带 “切换” 关键字，但模型名称支持模糊匹配。
       -------------------
       输入 "帮助" 获取更详细的使用说明。`);
     }

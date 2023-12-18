@@ -1,6 +1,8 @@
 import { type MemoryCache } from './cache';
+import { ConversationContext } from './context';
 import { type ChatModel } from './llm';
 import type { PluginObject } from './plugin';
+import { MaybePromise } from './typescript';
 
 type AssistantConfigBase = {
   /**
@@ -22,6 +24,11 @@ type AssistantConfigBase = {
    * 缓存
    */
   cache?: MemoryCache;
+
+  /**
+   * 输出帮助信息
+   */
+  help?: (ctx: ConversationContext) => MaybePromise<void>;
 
   /**
    * 维护者列表

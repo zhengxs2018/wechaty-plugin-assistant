@@ -5,10 +5,6 @@ import { toSingleQuotes } from '../vendors';
 
 const REF_MSG_SEP = '- - - - - - - - - - - - - - -';
 
-const stopWords = ['停', '停止', '停止回复'];
-
-const newWords = ['新对话', '新聊天', '重新开始', '重置'];
-
 /**
  * 清理用户消息
  *
@@ -37,7 +33,7 @@ export async function processTextMessage(
       👀 你想要说什么？`);
   }
 
-  const { monitor } = assistant;
+  const { monitor, keywords } = assistant;
 
   // Note: 需要先清理，否则命令无法匹配
   // 如果是群聊，清除自身的 @ 信息
@@ -54,12 +50,16 @@ export async function processTextMessage(
   // 并且指令允许重复触发
   if (text.startsWith('/')) {
     monitor.stats.command += 1;
-
-    await assistant.command.parse(ctx, text.split(' '));
-    return;
+    return assistant.command.parse(ctx, text.split(' '))
   }
 
-  if (stopWords.includes(text)) {
+  // 处理帮助命令
+  if (keywords.help.includes(text)) {
+    controller.abort();
+    return assistant.options.help(ctx)
+  }
+
+  if (keywords.stopConversation.includes(text)) {
     if (ctx.isLocked) {
       monitor.stats.skipped += 1;
       ctx.abort();
@@ -72,7 +72,7 @@ export async function processTextMessage(
   }
 
   // 允许用户主动终止对话
-  if (newWords.includes(text)) {
+  if (keywords.newConversation.includes(text)) {
     ctx.session.clear();
 
     if (ctx.isLocked) {
@@ -126,8 +126,7 @@ export async function processTextMessage(
       我会发送一个被引用消息和一个问题;
       你需要根据我引用的消息，来回答我发送的问题;
       你应该仅返回和我引用消息和问题相关的内容;
-
-      被引用的消息: """ ${cleanUserMessage(question)} """;
+      被引用的消息: """ ${cleanUserMessage(question)}; """;
       这是我的问题: """ ${cleanUserMessage(input)}; """ `;
   }
 

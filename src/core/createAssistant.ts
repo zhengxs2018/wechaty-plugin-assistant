@@ -1,6 +1,7 @@
 import { codeBlock } from 'common-tags';
 
 import { Command } from '../integrations/commander';
+import { deepl } from '../commands'
 import { type Assistant, type AssistantConfig } from '../interfaces';
 import { createAssistantHooks } from './createAssistantHooks';
 import { createAssistantMonitor } from './createAssistantMonitor';
@@ -8,6 +9,8 @@ import { resolveAssistantOptions } from './resolveAssistantOptions';
 import { setupConfigAndLLM } from './setupConfigAndLLM';
 import { wechatyMessageHandler } from './wechatyMessageHandler';
 import { wechatyPluginCallback } from './wechatyPluginCallback';
+
+import { keywords } from './keywords'
 
 export function createAssistant(config: AssistantConfig) {
   const options = resolveAssistantOptions(config);
@@ -26,6 +29,8 @@ export function createAssistant(config: AssistantConfig) {
     chatbotUser: null,
     wechaty: null,
     command: program,
+    keywords,
+    llm,
     handler: message => wechatyMessageHandler(assistant, message),
     callback: () => {
       return bot => void wechatyPluginCallback(assistant, bot);
@@ -50,6 +55,8 @@ export function createAssistant(config: AssistantConfig) {
       monitor.running = false;
     },
   };
+
+  program.addCommand(deepl)
 
   setupConfigAndLLM(options, assistant);
 
