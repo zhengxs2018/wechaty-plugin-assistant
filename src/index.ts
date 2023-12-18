@@ -1,4 +1,4 @@
-export * from './commands'
+export * from './commands';
 export * from './core';
 export * from './llms';
 export * from './llmapi';
