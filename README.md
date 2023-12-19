@@ -7,7 +7,8 @@
 [![][npm-types-shield]][npm-types-link]
 [![][npm-release-shield]][npm-release-link]
 [![][npm-downloads-shield]][npm-downloads-link]
-[![][github-releasedate-shield]][github-releasedate-link]<br/>
+[![][github-releasedate-shield]][github-releasedate-link]
+[![Powered by Wechaty](https://img.shields.io/badge/Powered%20By-Wechaty-brightgreen.svg?labelColor=black&style=flat-square)](https://wechaty.js.org)<br/>
 [![][github-contributors-shield]][github-contributors-link]
 [![][github-forks-shield]][github-forks-link]
 [![][github-stars-shield]][github-stars-link]
