@@ -221,6 +221,7 @@ $ pnpm dev
 ## 🔗 更多工具
 
 - **[🤖 @zhengxs/ai](https://github.com/zhengxs2018/ai)** - 集成 百度文心一言，阿里通义千问，腾讯混元助手 和 讯飞星火认知 等国内大模型的 API，并且适配 OpenAI 的输入与输出。
+- **[将钉钉机器人接入 Wechaty](https://github.com/zhengxs2018/dingtalk-sdk-for-js/tree/main/packages/wechaty-puppet-dingtalk#readme)** - 开发中
 
 <div align="right">
 
