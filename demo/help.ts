@@ -1,8 +1,8 @@
 import {
-  kfc,
   ChatType,
   createAssistant,
   createMockTextMessage,
+  kfc,
   MultiChatModelSwitch,
 } from '../src';
 
@@ -28,7 +28,7 @@ const assistant = createAssistant({
   ]),
 });
 
-assistant.command.addCommand(kfc)
+assistant.command.addCommand(kfc);
 
 async function main() {
   assistant.run();

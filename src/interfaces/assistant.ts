@@ -6,10 +6,10 @@ import {
 } from 'wechaty';
 
 import { type Command } from '../integrations';
-import { type ChatModel } from './llm';
-import { type Keywords } from './keywords';
 import { type ConversationContext } from './context';
 import { type HookQueue, type HooksName } from './hooks';
+import { type Keywords } from './keywords';
+import { type ChatModel } from './llm';
 import { type AssistantMonitor } from './monitor';
 import { type AssistantOptions } from './options';
 
@@ -43,7 +43,7 @@ export interface Assistant {
    */
   hooks: AssistantHooks;
 
-  llm: ChatModel
+  llm: ChatModel;
 
   /**
    * 当前机器人登录的用户

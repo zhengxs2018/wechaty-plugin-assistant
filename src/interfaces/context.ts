@@ -3,8 +3,8 @@ import { type Message, type Sayable } from 'wechaty';
 
 import { type Assistant } from './assistant';
 import { type State } from './cache';
-import { type LockInfo } from './lock';
 import { type ChatModel } from './llm';
+import { type LockInfo } from './lock';
 
 /**
  * 输入类型

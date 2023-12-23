@@ -1,16 +1,15 @@
 import { codeBlock } from 'common-tags';
 
+import { deepl } from '../commands';
 import { Command } from '../integrations/commander';
-import { deepl } from '../commands'
 import { type Assistant, type AssistantConfig } from '../interfaces';
 import { createAssistantHooks } from './createAssistantHooks';
 import { createAssistantMonitor } from './createAssistantMonitor';
+import { keywords } from './keywords';
 import { resolveAssistantOptions } from './resolveAssistantOptions';
 import { setupConfigAndLLM } from './setupConfigAndLLM';
 import { wechatyMessageHandler } from './wechatyMessageHandler';
 import { wechatyPluginCallback } from './wechatyPluginCallback';
-
-import { keywords } from './keywords'
 
 export function createAssistant(config: AssistantConfig) {
   const options = resolveAssistantOptions(config);
@@ -56,7 +55,7 @@ export function createAssistant(config: AssistantConfig) {
     },
   };
 
-  program.addCommand(deepl)
+  program.addCommand(deepl);
 
   setupConfigAndLLM(options, assistant);
 

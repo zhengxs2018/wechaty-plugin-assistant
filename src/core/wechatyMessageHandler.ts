@@ -12,13 +12,17 @@ export async function wechatyMessageHandler(
   assistant: Assistant,
   message: Message,
 ): Promise<void> {
-  const { monitor,options: { disabledOutdatedDetection } } = assistant;
+  const {
+    monitor,
+    options: { disabledOutdatedDetection },
+  } = assistant;
 
   // 允许中间停止助手
   if (!monitor.running) return;
 
   // Note: 忽略每次启动之前的微信同步消息，避免重复处理
-  if (!disabledOutdatedDetection && monitor.startupTime > message.date()) return;
+  if (!disabledOutdatedDetection && monitor.startupTime > message.date())
+    return;
 
   // Note: 有时候不会收到，遂放弃实现自我管理的功能
   if (message.self()) return;

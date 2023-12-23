@@ -1,12 +1,13 @@
+import { PuppetDingTalk } from '@zhengxs/wechaty-puppet-dingtalk';
+import { WechatyBuilder } from 'wechaty';
+import { EventLogger, QRCodeTerminal } from 'wechaty-plugin-contrib';
+
 import {
   ChatERNIEBot,
   ChatQWen,
-  MultiChatModelSwitch,
   createAssistant,
+  MultiChatModelSwitch,
 } from '../src';
-import { WechatyBuilder } from 'wechaty';
-import { EventLogger, QRCodeTerminal } from 'wechaty-plugin-contrib';
-import { PuppetDingTalk } from '@zhengxs/wechaty-puppet-dingtalk';
 
 const ernie = new ChatERNIEBot({
   token: process.env.EB_ACCESS_TOKEN, // 飞桨平台的 token
@@ -14,11 +15,11 @@ const ernie = new ChatERNIEBot({
 
 const qwen = new ChatQWen({
   apiKey: process.env.QWEN_API_KEY,
-})
+});
 
 const assistant = createAssistant({
   llm: new MultiChatModelSwitch([ernie, qwen]),
-  disabledOutdatedDetection: true // 禁用过期消息检测
+  disabledOutdatedDetection: true, // 禁用过期消息检测
 });
 
 const bot = WechatyBuilder.build({

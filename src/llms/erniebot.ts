@@ -14,7 +14,7 @@ export interface ChatERNIEBotOptions extends EBApiOptions {
 }
 
 export class ChatERNIEBot implements ChatModel {
-  name: string ='ernie-bot'
+  name: string = 'ernie-bot';
   human_name: string = '文心一言';
   input_type = [ChatType.Text];
 

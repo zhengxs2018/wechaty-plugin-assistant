@@ -27,7 +27,8 @@ export async function processTextMessage(
   // Note: 需要先清理，否则命令无法匹配
   // 如果是群聊，清除自身的 @ 信息
   if (ctx.conversationTitle) {
-    message.payload!.text = message.text()
+    message.payload!.text = message
+      .text()
       // 清理 @机器人 的信息
       .replaceAll(`@${ctx.chatbotUserName}`, '')
       // 去除 @ 符合，但保留 @ 后的内容
@@ -48,12 +49,12 @@ export async function processTextMessage(
   // 并且指令允许重复触发
   if (text.startsWith('/')) {
     monitor.stats.command += 1;
-    return assistant.command.parse(ctx, text.split(' '))
+    return assistant.command.parse(ctx, text.split(' '));
   }
 
   // 显示帮助
   if (keywords.help.includes(text)) {
-    return assistant.options.help(ctx)
+    return assistant.options.help(ctx);
   }
 
   // 显示源码

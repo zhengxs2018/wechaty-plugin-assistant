@@ -1,6 +1,6 @@
 import { type AssistantConfig, type AssistantOptions } from '../interfaces';
 import { createMemoryCache } from './createMemoryCache';
-import { printHelp } from './printHelp'
+import { printHelp } from './printHelp';
 
 export const resolveAssistantOptions = ({
   debug = false,
