@@ -7,7 +7,7 @@
     "removeComments": false,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "useDefineForClassFields": false,
+    "useDefineForClassFields": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
