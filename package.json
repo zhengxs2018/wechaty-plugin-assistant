@@ -1,6 +1,6 @@
 {
   "name": "@zhengxs/wechaty-plugin-assistant",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "description": "基于 wechaty 的聊天助手插件",
@@ -42,7 +42,7 @@
   "scripts": {
     "prepare": "husky install",
     "preinstall": "npx only-allow pnpm",
-    "dev": "pnpm task ./demo/index.ts",
+    "dev": "pnpm task --watch ./demo/dingtalk.ts",
     "task": "node --no-warnings -r tsconfig-paths/register -r dotenv/config -r jiti/register",
     "inspect": "node --no-warnings --inspect -r tsconfig-paths/register -r dotenv/config -r jiti/register",
     "build": "trash dist dist-types && pnpm lint && vite build",
@@ -75,6 +75,7 @@
     "@types/node": "^20.10.5",
     "@typescript-eslint/eslint-plugin": "^6.14.0",
     "@typescript-eslint/parser": "^6.14.0",
+    "@zhengxs/wechaty-puppet-dingtalk": "0.0.1-beta.8",
     "dotenv": "^16.3.1",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",

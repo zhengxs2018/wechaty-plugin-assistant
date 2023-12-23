@@ -26,6 +26,11 @@ type AssistantConfigBase = {
   cache?: MemoryCache;
 
   /**
+   * 禁用过期检测
+   */
+  disabledOutdatedDetection?: boolean;
+
+  /**
    * 输出帮助信息
    */
   help?: (ctx: ConversationContext) => MaybePromise<void>;

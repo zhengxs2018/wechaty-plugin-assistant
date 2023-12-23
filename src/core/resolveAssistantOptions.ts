@@ -5,6 +5,7 @@ import { printHelp } from './printHelp'
 export const resolveAssistantOptions = ({
   debug = false,
   testing = false,
+  disabledOutdatedDetection = false,
   cache = createMemoryCache(),
   maintainers = [],
   help = printHelp,
@@ -13,6 +14,7 @@ export const resolveAssistantOptions = ({
   ...rest,
   debug,
   testing,
+  disabledOutdatedDetection,
   cache,
   help,
   maintainers,

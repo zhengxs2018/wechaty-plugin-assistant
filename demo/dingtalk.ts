@@ -6,6 +6,7 @@ import {
 } from '../src';
 import { WechatyBuilder } from 'wechaty';
 import { EventLogger, QRCodeTerminal } from 'wechaty-plugin-contrib';
+import { PuppetDingTalk } from '@zhengxs/wechaty-puppet-dingtalk';
 
 const ernie = new ChatERNIEBot({
   token: process.env.EB_ACCESS_TOKEN, // 飞桨平台的 token
@@ -16,17 +17,20 @@ const qwen = new ChatQWen({
 })
 
 const assistant = createAssistant({
-  llm: new MultiChatModelSwitch([ernie, qwen])
+  llm: new MultiChatModelSwitch([ernie, qwen]),
+  disabledOutdatedDetection: true // 禁用过期消息检测
 });
 
 const bot = WechatyBuilder.build({
   name: 'demo',
-  puppet: 'wechaty-puppet-wechat4u',
-  puppetOptions: { uos: true },
+  puppet: new PuppetDingTalk({
+    clientId: process.env.DINGTALK_CLIENT_ID,
+    clientSecret: process.env.DINGTALK_CLIENT_SECRET,
+  }),
 });
 
 bot.use(QRCodeTerminal({ small: true }));
-bot.use(EventLogger(['login', 'logout', 'error', 'friendship', 'room-invite']));
+bot.use(EventLogger(['login', 'logout', 'error']));
 
 // 作为插件使用
 bot.use(assistant.callback());
